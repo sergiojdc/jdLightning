@@ -4,7 +4,8 @@
 #include <vector>
 #include <random>
 #include <SFML/Graphics.hpp>
-
+#include <jlColor.h>
+using namespace jlUtilitiesSDK;
 struct Point {
   int x = 0;
   int y = 0;
@@ -95,6 +96,7 @@ int main() {
 
   int currentWidthIdx = 0; 
   int currentHeightIdx = 0;
+  jlColor color;
   //Prepare data
   for (int i = 0; i < numCpuToDraw; i++) {
     gCoreFinished[i] = false;
