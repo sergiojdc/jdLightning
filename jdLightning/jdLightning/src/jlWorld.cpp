@@ -162,6 +162,30 @@ jlWorld::threadRenderFunction(uint32 threadIdx) {
   auto array = m_IndexImageWidth[threadIdx];
   auto vp = m_vp;
 
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 width = 0; width < threadWidth; ++width) { // up
+    for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
+      uint32 currentX = array[width];
+      x = vp.m_pixelSize * (currentX - 0.5 * (vp.m_wRes - 1.0));
+      y = vp.m_pixelSize * (height - 0.5 * (vp.m_hRes - 1.0));
+      ray.m_origin = { x, y, zw };
+      pixelColor = m_pTracer->traceRay(ray);
+      displayPixel(currentX, height, pixelColor);
+    }
+  }
+  m_threadsFinished[threadIdx] = true;
+}
+
+void jlWorld::threadRenderFunctionV2(uint32 threadIdx) {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  uint32 threadWidth = m_IndexImageWidth[threadIdx].size();
+  auto array = m_IndexImageWidth[threadIdx];
+  auto vp = m_vp;
+
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
   jlPoint2 pp;
@@ -183,6 +207,25 @@ jlWorld::threadRenderFunction(uint32 threadIdx) {
 
 void
 jlWorld::softwareRender() {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
+    for (uint32 cheight = 0; cheight < m_vp.m_hRes; ++cheight) { // across 
+      x = m_vp.m_pixelSize * (cwidth - 0.5 * (m_vp.m_wRes - 1.0));
+      y = m_vp.m_pixelSize * (cheight - 0.5 * (m_vp.m_hRes - 1.0));
+      ray.m_origin = { x, y, zw };
+      pixelColor = m_pTracer->traceRay(ray);
+      displayPixel(cwidth, cheight, pixelColor);
+    }
+  }
+  m_threadsFinished[0] = true;
+}
+
+void jlWorld::softwareRenderV2() {
   jlColor pixelColor;
   jlRay ray;
   double zw = 100.0;

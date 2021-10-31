@@ -76,10 +76,22 @@ class jlWorld {
   threadRenderFunction(uint32 threadIdx);
 
   /**
+   * @brief function for render with threads
+   */
+  void 
+  threadRenderFunctionV2(uint32 threadIdx);
+
+  /**
    * @brief function for render normaly without threads
    */
   void 
   softwareRender();
+
+  /**
+   * @brief function for render normaly without threads
+   */
+  void 
+  softwareRenderV2();
 
   /**
    * @brief function to change color to a pixel
