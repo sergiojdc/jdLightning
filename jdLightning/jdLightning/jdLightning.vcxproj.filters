@@ -22,6 +22,9 @@
     <Filter Include="Archivos de encabezado\Tracers">
       <UniqueIdentifier>{0283a81b-849d-4d4e-8c93-f8d94527b8ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Samples">
+      <UniqueIdentifier>{09666ac2-5057-4012-9cbc-88892056329c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -70,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="include\jlTMultipleObjects.h">
       <Filter>Archivos de encabezado\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlSampler.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlSJittered.h">
+      <Filter>Archivos de encabezado\Samples</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

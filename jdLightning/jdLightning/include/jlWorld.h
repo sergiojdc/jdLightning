@@ -76,10 +76,23 @@ class jlWorld {
   threadRenderFunction(uint32 threadIdx);
 
   /**
-   * @brief function for render with threads
+   * @brief function for render with threads and SimpleSampler
    */
   void 
-  threadRenderFunctionV2(uint32 threadIdx);
+  threadRenderFunctionSimpleSampler(uint32 threadIdx);
+
+
+  /**
+   * @brief function for render with threads and Random Sampler
+   */
+  void 
+  threadRenderFunctionRandomSampler(uint32 threadIdx);
+
+  /**
+   * @brief function for render with threads and Jittered Sampler
+   */
+  void 
+  threadRenderFunctionJitteredSampler(uint32 threadIdx);
 
   /**
    * @brief function for render normaly without threads
@@ -88,10 +101,22 @@ class jlWorld {
   softwareRender();
 
   /**
-   * @brief function for render normaly without threads
+   * @brief function for render normaly without threads and SimpleSampler
    */
   void 
-  softwareRenderV2();
+  softwareRenderSimpleSampler();
+
+  /**
+   * @brief function for render normaly without threads and Random Sampler
+   */
+  void 
+  softwareRenderRandomSampler();
+  
+  /**
+   * @brief function for render normaly without threads and Jittered Sampler
+   */
+  void 
+  softwareRenderJitteredSampler();
 
   /**
    * @brief function to change color to a pixel

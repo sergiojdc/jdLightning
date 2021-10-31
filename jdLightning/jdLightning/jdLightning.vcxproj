@@ -199,7 +199,9 @@
     <ClInclude Include="include\jlGeometriObject.h" />
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
+    <ClInclude Include="include\jlSampler.h" />
     <ClInclude Include="include\jlShadeRec.h" />
+    <ClInclude Include="include\jlSJittered.h" />
     <ClInclude Include="include\jlTMultipleObjects.h" />
     <ClInclude Include="include\jlTracer.h" />
     <ClInclude Include="include\jlTSingleSphere.h" />

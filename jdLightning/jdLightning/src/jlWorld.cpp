@@ -48,6 +48,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
 
 
   m_vp = jlViewPlane(width, height, 1.0f, 1.0f);
+  m_vp.m_numSamples = 16;
   m_backgroundColor = jlColor::Black();
 
   //m_pTracer.reset(new jlTSingleSphere(this));
@@ -131,7 +132,7 @@ jlWorld::updateRender() {
   if (m_bThreading)
     threadRender();
   else {
-    m_threads[0] = std::thread(&jlWorld::softwareRender, this);
+    m_threads[0] = std::thread(&jlWorld::softwareRenderSimpleSampler, this);
     m_threads[0].detach();
     softwareRender();
 
@@ -143,7 +144,7 @@ jlWorld::updateRender() {
 void 
 jlWorld::threadRender() {
   for (uint32 i = 0; i < m_numCpus; i++) {
-    m_threads[i] = std::thread(&jlWorld::threadRenderFunction, this, i);
+    m_threads[i] = std::thread(&jlWorld::threadRenderFunctionSimpleSampler, this, i);
   }
   for (uint32 i = 0; i < m_numCpus; i++) {
     m_threads[i].detach();
@@ -176,7 +177,7 @@ jlWorld::threadRenderFunction(uint32 threadIdx) {
   m_threadsFinished[threadIdx] = true;
 }
 
-void jlWorld::threadRenderFunctionV2(uint32 threadIdx) {
+void jlWorld::threadRenderFunctionSimpleSampler(uint32 threadIdx) {
   jlColor pixelColor;
   jlRay ray;
   double zw = 100.0;
@@ -195,10 +196,86 @@ void jlWorld::threadRenderFunctionV2(uint32 threadIdx) {
     for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
       pixelColor = black;
       uint32 currentX = array[width];
-      x = vp.m_pixelSize * (currentX - 0.5 * (vp.m_wRes - 1.0));
-      y = vp.m_pixelSize * (height - 0.5 * (vp.m_hRes - 1.0));
-      ray.m_origin = { x, y, zw };
-      pixelColor = m_pTracer->traceRay(ray);
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        for (uint32 q = 0; q < n; ++q) {
+          pp.x = vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes +(q + 0.5f) /n);
+          pp.y = vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + 0.5f) /n);
+          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pixelColor += m_pTracer->traceRay(ray);
+        }
+      }
+      pixelColor /= vp.m_numSamples;
+      displayPixel(currentX, height, pixelColor);
+    }
+  }
+  m_threadsFinished[threadIdx] = true;
+}
+
+void 
+jlWorld::threadRenderFunctionRandomSampler(uint32 threadIdx) {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  uint32 threadWidth = m_IndexImageWidth[threadIdx].size();
+  auto array = m_IndexImageWidth[threadIdx];
+  auto vp = m_vp;
+
+  uint32 n = (uint32)m_vp.m_numSamples;
+  auto black = jlColor::Black();
+  jlPoint2 pp;
+
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 width = 0; width < threadWidth; ++width) { // up
+    for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
+      pixelColor = black;
+      uint32 currentX = array[width];
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        pp.x = vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + jlRandom::randomUnitFloat());
+        pp.y = vp.m_pixelSize * (height - 0.5 * vp.m_hRes + jlRandom::randomUnitFloat());
+        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pixelColor += m_pTracer->traceRay(ray);
+      }
+      pixelColor /= n;
+      displayPixel(currentX, height, pixelColor);
+    }
+  }
+  m_threadsFinished[threadIdx] = true;
+}
+
+void 
+jlWorld::threadRenderFunctionJitteredSampler(uint32 threadIdx) {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  uint32 threadWidth = m_IndexImageWidth[threadIdx].size();
+  auto array = m_IndexImageWidth[threadIdx];
+  auto vp = m_vp;
+
+  uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
+  auto black = jlColor::Black();
+  jlPoint2 pp;
+
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 width = 0; width < threadWidth; ++width) { // up
+    for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
+      pixelColor = black;
+      uint32 currentX = array[width];
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        for (uint32 q = 0; q < n; ++q) {
+          pp.x = vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + (q + jlRandom::randomUnitFloat()) / n);
+          pp.y = vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + jlRandom::randomUnitFloat()) / n);
+          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pixelColor += m_pTracer->traceRay(ray);
+        }
+      }
+      pixelColor /= vp.m_numSamples;
       displayPixel(currentX, height, pixelColor);
     }
   }
@@ -218,14 +295,14 @@ jlWorld::softwareRender() {
       x = m_vp.m_pixelSize * (cwidth - 0.5 * (m_vp.m_wRes - 1.0));
       y = m_vp.m_pixelSize * (cheight - 0.5 * (m_vp.m_hRes - 1.0));
       ray.m_origin = { x, y, zw };
-      pixelColor = m_pTracer->traceRay(ray);
+      pixelColor += m_pTracer->traceRay(ray);
       displayPixel(cwidth, cheight, pixelColor);
     }
   }
   m_threadsFinished[0] = true;
 }
 
-void jlWorld::softwareRenderV2() {
+void jlWorld::softwareRenderSimpleSampler() {
   jlColor pixelColor;
   jlRay ray;
   double zw = 100.0;
@@ -239,10 +316,79 @@ void jlWorld::softwareRenderV2() {
   for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
     for (uint32 cheight = 0; cheight < m_vp.m_hRes; ++cheight) { // across 
       pixelColor = black;
-      x = m_vp.m_pixelSize * (cwidth - 0.5 * (m_vp.m_wRes - 1.0));
-      y = m_vp.m_pixelSize * (cheight - 0.5 * (m_vp.m_hRes - 1.0));
-      ray.m_origin = { x, y, zw };
-      pixelColor = m_pTracer->traceRay(ray);
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        for (uint32 q = 0; q < n; ++q) {
+          pp.x = m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + 0.5f) / n);
+          pp.y = m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + 0.5f) / n);
+          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pixelColor = m_pTracer->traceRay(ray);
+        }
+      }
+
+      pixelColor /= m_vp.m_numSamples;
+      displayPixel(cwidth, cheight, pixelColor);
+    }
+  }
+  m_threadsFinished[0] = true;
+}
+
+void 
+jlWorld::softwareRenderRandomSampler() {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
+  auto black = jlColor::Black();
+  jlPoint2 pp;
+
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
+    for (uint32 cheight = 0; cheight < m_vp.m_hRes; ++cheight) { // across 
+      pixelColor = black;
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        pp.x = m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + jlRandom::randomUnitFloat());
+        pp.y = m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + jlRandom::randomUnitFloat());
+        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pixelColor += m_pTracer->traceRay(ray);
+      }
+
+      pixelColor /= m_vp.m_numSamples;
+      displayPixel(cwidth, cheight, pixelColor);
+    }
+  }
+  m_threadsFinished[0] = true;
+}
+
+void 
+jlWorld::softwareRenderJitteredSampler() {
+  jlColor pixelColor;
+  jlRay ray;
+  double zw = 100.0;
+  double x, y;
+
+  uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
+  auto black = jlColor::Black();
+  jlPoint2 pp;
+
+  ray.m_direction = { 0, 0, -1 };
+  for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
+    for (uint32 cheight = 0; cheight < m_vp.m_hRes; ++cheight) { // across 
+      pixelColor = black;
+      //Sampler
+      for (uint32 p = 0; p < n; ++p) {
+        for (uint32 q = 0; q < n; ++q) {
+          pp.x = m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + jlRandom::randomUnitFloat()) / n);
+          pp.y = m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + jlRandom::randomUnitFloat()) / n);
+          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pixelColor = m_pTracer->traceRay(ray);
+        }
+      }
+
+      pixelColor /= m_vp.m_numSamples;
       displayPixel(cwidth, cheight, pixelColor);
     }
   }
