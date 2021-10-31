@@ -11,18 +11,17 @@
  */
 /*****************************************************************************/
 #pragma once
-#include "jlPrerequisitesUtil.h"
+#include "jlPlatformDefines.h"
+#include "jlPlatformTypes.h"
+#include "jlStdHeaders.h"
 
 namespace jlUtilitiesSDK {
-  class JL_UTILITY_EXPORT Random
+  struct JL_UTILITY_EXPORT jlRandom
   {
-   public:
-    Random() {};
-    ~Random() {};
     /**
      * @brief get two random numbers random with box miller math
      */
-    static void
+    FORCEINLINE static void
     RandomBoxMiller(float& result_a, float& result_b, float dMean, float dStdDeviation) {
       float x1 = 0, x2 = 0, w = 0, y1 = 0, y2 = 0;
 
@@ -39,12 +38,12 @@ namespace jlUtilitiesSDK {
       result_b = (dMean + y2 * dStdDeviation);
       //return(m + y1 * s);
     }
-   private:
+
     /**
      * @brief get random float between 0 and 1
      * @return float between 0 and 1
      */
-    static float
+    FORCEINLINE static float
     randomUnitFloat() {
       srand((unsigned int)time(NULL));
       return (float(rand()) / float((RAND_MAX)));
@@ -54,7 +53,7 @@ namespace jlUtilitiesSDK {
      * @brief get random float
      * @return float
      */
-    static float
+    FORCEINLINE static float
     randomFloat() {
       srand((unsigned int)time(NULL));
       return float(rand());
@@ -65,10 +64,13 @@ namespace jlUtilitiesSDK {
      * @return an interger between 0 and 255
      * @note recommended for colors
      */
-    static float
-    randomInt0_255() {
-      srand((unsigned int)time(NULL));
-      return int(rand()%256);
-    }
+    FORCEINLINE static uint32
+    randomInt0_255();
   };
+
+  FORCEINLINE uint32
+  jlRandom::randomInt0_255() {
+    srand((uint32)time(NULL));
+    return uint32(rand() % 256);
+  }
 }

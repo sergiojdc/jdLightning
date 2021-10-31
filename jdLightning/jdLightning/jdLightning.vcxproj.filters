@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\GeometryObjects">
+      <UniqueIdentifier>{37415899-45c9-458a-ba6a-dbd0118ae15b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\GeometriObjects">
+      <UniqueIdentifier>{aab9340a-7e54-40d9-9aee-5c6b06bfc17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Tracers">
+      <UniqueIdentifier>{0283a81b-849d-4d4e-8c93-f8d94527b8ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -21,11 +30,17 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlGOSphere.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlGOPlane.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlWorld.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\jlVector3.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="include\Prerequisites.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -34,6 +49,27 @@
     </ClInclude>
     <ClInclude Include="include\jlShadeRec.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGOPlane.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGOSphere.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlWorld.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlViewPlane.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlTracer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlTSingleSphere.h">
+      <Filter>Archivos de encabezado\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlTMultipleObjects.h">
+      <Filter>Archivos de encabezado\Tracers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,34 +16,34 @@
 #include <jlRay.h>
 #include <jlNormal.h>
 
-class World;
-class Material;
+class jlWorld;
+class jlMaterial;
 
-class ShadeRec {
+class jlShadeRec {
 public:
   /**
    * @brief constructo with world
    * @param world is a pointer to the world to use
    */
-  ShadeRec(World* world);
+  jlShadeRec(jlWorld* world);
 
   /**
    * @brief copy constructor
    * @param sr is the other ShadeRec to copy
    */
-   //ShadeRec(const ShadeRec* sr);
+  jlShadeRec(const jlShadeRec& sr);
 
    /**
     * @brief defaul destructor
     */
-  ~ShadeRec() {};
+  ~jlShadeRec() {};
 
   /**
    * @brief assignment operator
    * @param rhs is the other ShadeRec to copy
    */
-  ShadeRec&
-  operator= (const ShadeRec& rhs);
+  jlShadeRec&
+  operator= (const jlShadeRec& rhs);
 
   /**
    * @brief to check if the ray hitted and objetc
@@ -68,7 +68,7 @@ public:
   /**
    * @brief world reference for shading
    */
-  World* m_world = nullptr;
+  jlWorld* m_world = nullptr;
 
   /**
    * @brief neareat object's material
@@ -96,20 +96,30 @@ public:
   //jlVector3 m_dir;
 };
 
-inline ShadeRec::ShadeRec(World* wr)
+inline 
+jlShadeRec::jlShadeRec(jlWorld* wr)
   : m_hitAnObject(false),
-  m_localHitPoint(0, 0, 0),
-  m_normal(),
-  m_color({ 0,}),
-  m_world(wr) {}
+    m_localHitPoint(0, 0, 0),
+    m_normal(),
+    m_color({ 0,}),
+    m_world(wr) {}
 
 //inline 
 //ShadeRec::ShadeRec(const ShadeRec& sr) {
 //  *this = sr;
 //}
 
-inline ShadeRec&
-ShadeRec::operator=(const ShadeRec& rhs) {
+inline 
+jlShadeRec::jlShadeRec(const jlShadeRec& sr) {
+  m_hitAnObject = sr.m_hitAnObject;
+  m_localHitPoint = sr.m_localHitPoint;
+  m_normal = sr.m_normal;
+  m_color = sr.m_color;
+  m_world = sr.m_world;
+}
+
+inline jlShadeRec&
+jlShadeRec::operator=(const jlShadeRec& rhs) {
   m_hitAnObject = rhs.m_hitAnObject;
   m_localHitPoint = rhs.m_localHitPoint;
   m_normal = rhs.m_normal;

@@ -2,38 +2,38 @@
 
 namespace jlUtilitiesSDK {
 
-		Timer::Timer()	{
+		jlTimer::jlTimer()	{
 				reset();
 		}
 
 		void 
-		Timer::reset()	{
+		jlTimer::reset()	{
 				m_startTime = m_highResClock.now();
 		}
 
 		uint64 
-		Timer::getMilliseconds() const	{
+		jlTimer::getMilliseconds() const	{
 				auto newTime = m_highResClock.now();
 				std::chrono::duration<double> dur = newTime - m_startTime;
 				return duration_cast<std::chrono::milliseconds>(dur).count();
 		}
 		
 		uint64 
-		Timer::getMicroseconds() const {
+		jlTimer::getMicroseconds() const {
 				auto newTime = m_highResClock.now();
 				std::chrono::duration<double> dur = newTime - m_startTime;
 				return duration_cast<std::chrono::microseconds>(dur).count();
 		}
 		
 		float 
-		Timer::getSeconds() const	{
+		jlTimer::getSeconds() const	{
 				auto newTime = m_highResClock.now();
 				std::chrono::duration<double> dur = newTime - m_startTime;
 				return (float)duration_cast<std::chrono::microseconds>(dur).count() / 1000000.0f;
 		}
 
 		uint64 
-		Timer::getStartMilliseconds() const	{
+		jlTimer::getStartMilliseconds() const	{
 				std::chrono::nanoseconds startTimeNs = m_startTime.time_since_epoch();
 				return duration_cast<std::chrono::milliseconds>(startTimeNs).count();
 		}

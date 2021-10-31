@@ -352,14 +352,14 @@ namespace jlUtilitiesSDK {
      * @return jdvector with values rgba in unit
      */
     jlVector4
-    getInUnit();
+    getInUnit() const;
 
     /**
      * @brief function get the color in 255 value for 4dvector
      * @return jdvector4 with values rgba in 255 value
      */
     jlVector4
-    getIn255();
+    getIn255() const;
 
    private:
     /**
@@ -368,7 +368,48 @@ namespace jlUtilitiesSDK {
      */
     void
     makeNegativeTo0();
-  
+
+/*****************************************************************************/
+/**
+ * Static Functions
+ */
+/*****************************************************************************/
+   public:
+    /**
+     * @brief static function to get a red color in units
+     * @return color red in units
+     */
+    static jlColor
+    Red() { return {1.0f, 0.0f, 0.0f, 1.0}; }
+
+    /**
+     * @brief static function to get a blue color in units
+     * @return color blue in units
+     */
+    static jlColor
+    Blue() { return {0.0f, 0.0f, 1.0f, 1.0f}; }
+
+    /**
+     * @brief static function to get a green color in units
+     * @return green blue in units
+     */
+    static jlColor
+    Green() { return {0.0f, 1.0f, 0.0f, 1.0f}; }
+
+    /**
+     * @brief static function to get a black color in units
+     * @return color black in units
+     */
+    static jlColor
+    Black() { return {0.0f, 0.0f, 0.0f, 1.0f}; }
+
+    /**
+     * @brief static function to get a white color in units
+     * @return color white in units
+     */
+    static jlColor
+    White() { return {1.0f, 1.0f, 1.0f, 1.0f}; }
+
 /*****************************************************************************/
 /**
  * Members
@@ -579,8 +620,8 @@ namespace jlUtilitiesSDK {
   jlColor::make255() {
     if (m_isUnit) {
       *this *= 255;
-      makeLimited();
       m_isUnit = false;
+      makeLimited();
     }
     return *this;
   }
@@ -619,29 +660,29 @@ namespace jlUtilitiesSDK {
   }
 
   FORCEINLINE jlVector4
-  jlColor::getInUnit() {
+  jlColor::getInUnit() const {
     jlVector4 temp;
     if (m_isUnit) {
       temp = { r, g, b, a };
     }
     else {
       auto col = *this;
-      col.make255();
+      col.makeUnit();
       temp = col.C;
     }
     return temp;
   }
 
   FORCEINLINE jlVector4
-  jlColor::getIn255() {
+  jlColor::getIn255() const {
     jlVector4 temp;
     if (m_isUnit) {
-      temp = { r, g, b, a };
-    }
-    else {
       auto col = *this;
       col.make255();
       temp = col.C;
+    }
+    else {
+      temp = { r, g, b, a };
     }
     return temp;
   }

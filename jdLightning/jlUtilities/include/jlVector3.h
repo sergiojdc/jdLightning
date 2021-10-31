@@ -17,14 +17,14 @@
 
 namespace jlUtilitiesSDK {
 
-  class jlVector3
-  {
+  class jlPoint3;
+  class JL_UTILITY_EXPORT jlVector3 {
     /*****************************************************************************/
     /**
      * Constructors
      */
      /*****************************************************************************/
-  public:
+   public:
     /**
      * @brief defaul constructor
      */
@@ -53,10 +53,16 @@ namespace jlUtilitiesSDK {
     jlVector3(const jlVector2& _xy, const float& _z = 0.0f) : x(_xy.x), y(_xy.y), z(_z) {};
 
     /**
-     * @brief constructor with a jlVector3 and float params.
+     * @brief constructor with a jlVector3 params.
      * @param vec for x, y, z cordinate
      */
     jlVector3(const jlVector3& vec) : x(vec.x), y(vec.y), z(vec.z) {};
+
+    /**
+     * @brief constructor with a jlPoint3.
+     * @param point for x, y, z cordinate
+     */
+    jlVector3(const jlPoint3& point);
 
     /*****************************************************************************/
     /**
@@ -229,6 +235,13 @@ namespace jlUtilitiesSDK {
      */
     FORCEINLINE jlVector3&
     operator=(const jlVector3& Vec);
+    /**
+     * @brief queal this vector to other vector.
+     * @param vec is vector What to equal vector by.
+     * @return this vector equaled
+     */
+    //jlVector3&
+    //operator=(const jlPoint3& point);
 
 /*****************************************************************************/
 /**

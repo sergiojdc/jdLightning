@@ -1,36 +1,35 @@
 /*****************************************************************************/
 /**
-	* @file    jlGOPlane.h
-	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
-	* @date    26/10/2021
-	* @brief   A class for a plane heredated by jlGeometriObject
-	*
-	*
-	* @bug	    No known bugs.
-	*/
-	/*****************************************************************************/
+ * @file    jlGOSphere.h
+ * @author  Sergio Diaz (sergio_jdc@hotmail.com)
+ * @date    27/10/2021
+ * @brief   A class for a Sphere heredated by jlGeometriObject
+ *
+ *
+ * @bug	    No known bugs.
+ */
+/*****************************************************************************/
 #pragma once
 #include "jlGeometriObject.h"
 
-class jlPlane : public jlGeometricObject
-{
+class jlSphere : public jlGeometricObject {
  public:
   /**
    * @brief defaul constructor
    */
-   jlPlane() = default;
+  jlSphere() = default;
 
   /**
    * @brief constructor with point and normal
    * @param point is the plane's point
    * @param normal is the plane's normal
    */
-   jlPlane(const jlPoint3 point, const jlNormal& normal);
-  
+  jlSphere(const jlPoint3 pos, const float& ratio);
+
   /**
    * @brief function to detected a hit
    * @param ray is the ray whit check the hit
-   * @pram tmin is to check the nearest 
+   * @pram tmin is to check the nearest
    * @pram sr is the shade rec
    */
   virtual bool
@@ -39,19 +38,19 @@ class jlPlane : public jlGeometricObject
   /**
    * @brief defaul destructor
    */
-  ~jlPlane() {};
+  ~jlSphere() {};
 
-private:
   /**
    * @brief point through which
    */
-  jlPoint3 m_point;
+  jlPoint3 m_position;
 
   /**
    * @brief normal to the plane
    */
-  jlNormal m_normal;
+  float m_radius = 1;
 
+ private:
   /**
    * @brief epislon const
    */

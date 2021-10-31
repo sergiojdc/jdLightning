@@ -189,13 +189,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\jlGOPlane.cpp" />
+    <ClCompile Include="src\jlGOSphere.cpp" />
+    <ClCompile Include="src\jlWorld.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jlGeometriObject.h" />
+    <ClInclude Include="include\jlGOPlane.h" />
+    <ClInclude Include="include\jlGOSphere.h" />
     <ClInclude Include="include\jlShadeRec.h" />
-    <ClInclude Include="include\jlVector3.h" />
+    <ClInclude Include="include\jlTMultipleObjects.h" />
+    <ClInclude Include="include\jlTracer.h" />
+    <ClInclude Include="include\jlTSingleSphere.h" />
+    <ClInclude Include="include\jlViewPlane.h" />
+    <ClInclude Include="include\jlWorld.h" />
     <ClInclude Include="include\Prerequisites.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

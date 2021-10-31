@@ -40,6 +40,13 @@ namespace jlUtilitiesSDK {
      */
     jlPoint3(int32 _x, int32 _y, int32 _z) : x(_x), y(_y), z(_z) {};
 
+    /**
+     * @brief Create and initialize a new instance with the specified coordinates.
+     * @param InX The x-coordinate.
+     * @param InY The y-coordinate.
+     * @param InZ The z-coordinate.
+     */
+    jlPoint3(uint32 _x, uint32 _y, uint32 _z) : x(_x), y(_y), z(_z) {};
 
     /**
      * @brief Create and initialize a new instance with the specified coordinates.
@@ -48,6 +55,15 @@ namespace jlUtilitiesSDK {
      * @param InZ The z-coordinate.
      */
     jlPoint3(const float& _x, const float& _y, const float& _z) : 
+              x((int32)_x), y((int32)_y), z((int32)_z) {};
+
+    /**
+     * @brief Create and initialize a new instance with the specified coordinates.
+     * @param InX The x-coordinate.
+     * @param InY The y-coordinate.
+     * @param InZ The z-coordinate.
+     */
+    jlPoint3(const double& _x, const double& _y, const double& _z) :
               x((int32)_x), y((int32)_y), z((int32)_z) {};
 
     /**
@@ -198,6 +214,14 @@ namespace jlUtilitiesSDK {
     operator-(const jlPoint3& point) const;
 
     /**
+     * @brief Get the result of subtraction from this point.
+     * @param point The other point to subtract from this.
+     * @return A new subtracted point.
+     */
+    jlVector3
+    operator-(const jlVector3& point) const;
+
+    /**
      * @brief Get the result of division on this point.
      * @param point The other point to divide from this.
      * @return A new division point.
@@ -277,6 +301,14 @@ namespace jlUtilitiesSDK {
      */
     FORCEINLINE int32
     dot(const jlPoint3& point);
+
+    /**
+     * @brief Calculate the dot product
+     * @param point is the other point.
+     * @return the values of the dot product of this point and another
+     */
+    FORCEINLINE float
+    dot(const jlVector3& vec);
 
     /**
      * @brief Calculate the cross product
@@ -412,6 +444,15 @@ namespace jlUtilitiesSDK {
     tempPoint.z = z - point.z;
     return tempPoint;
   }
+
+  FORCEINLINE jlVector3
+  jlPoint3::operator-(const jlVector3& vec) const {
+    jlVector3 temp;
+    temp.x = x - vec.x;
+    temp.y = y - vec.y;
+    temp.z = z - vec.z;
+    return temp;
+  }
  
   FORCEINLINE jlPoint3
     jlPoint3::operator/(const jlPoint3& point) const {
@@ -455,6 +496,11 @@ namespace jlUtilitiesSDK {
   FORCEINLINE int32
   jlPoint3::dot(const jlPoint3& point) {
     return (x * point.x + y * point.y + z * point.z);
+  }
+
+  FORCEINLINE float
+  jlPoint3::dot(const jlVector3& vec) {
+    return (x * vec.x + y * vec.y + z * vec.z);
   }
 
   FORCEINLINE jlPoint3

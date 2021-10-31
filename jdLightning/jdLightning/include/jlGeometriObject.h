@@ -13,8 +13,9 @@
 #include <Prerequisites.h>
 #include <jlRay.h>
 #include <jlColor.h>
+#include "jlShadeRec.h"
 
-class GeometricObject {
+class jlGeometricObject {
  public:
 		/**
 			* @brief function to detected a hit
@@ -23,16 +24,25 @@ class GeometricObject {
 			* @pram sr is the shade rec
 			*/
   virtual bool
-  hit(const jlRay& ray, double& tmin, ShadeRec& sr) { return false; };
+  hit(const jlRay& ray, double& tmin, jlShadeRec& sr) { 
+				UNREFERENCED_PARAMETER(ray);
+				UNREFERENCED_PARAMETER(tmin);
+				UNREFERENCED_PARAMETER(sr);
+				return false; 
+		};
 
 		virtual bool
-		shadowHit(const jlRay& ray, float& tmin) { return false; };
+		shadowHit(const jlRay& ray, float& tmin) {
+				UNREFERENCED_PARAMETER(ray);
+				UNREFERENCED_PARAMETER(tmin); 
+				return false; 
+		};
 
 
 		/**
 			* @brief color use for debug
 			*/
-  jlColor color; // only used in first step
+  jlColor m_color; // only used in first step
 
 		//Material* m_pMaterial;
 };

@@ -192,6 +192,7 @@
     <ClCompile Include="src\jlQuaternion.cpp" />
     <ClCompile Include="src\jlRadian.cpp" />
     <ClCompile Include="src\jlTimer.cpp" />
+    <ClCompile Include="src\jlVector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jlColor.h" />

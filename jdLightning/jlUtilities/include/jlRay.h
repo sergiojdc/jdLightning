@@ -13,6 +13,7 @@
 
 #include "jlPlatformDefines.h"
 #include "jlVector3.h"
+#include "jlPoint3.h"
 
 namespace jlUtilitiesSDK
 {
@@ -75,7 +76,7 @@ namespace jlUtilitiesSDK
 				/**
 					* @brief ray's origin
 					*/
-				jlVector3 m_origin;
+				jlPoint3 m_origin;
 
 				/**
 					* @brief ray's direction

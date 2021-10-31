@@ -21,17 +21,17 @@ namespace jlUtilitiesSDK {
   using std::chrono::duration;
   using std::chrono::duration_cast;
 
-  class JL_UTILITY_EXPORT Timer {
+  class JL_UTILITY_EXPORT jlTimer {
    public:
     /**
      * @brief default constructor and start timing.
      */
-    Timer();
+     jlTimer();
 
     /**
      * @brief default destructor
      */
-    ~Timer() {};
+    ~jlTimer() {};
 
     /**
      * @brief Reset the timer to zero.
