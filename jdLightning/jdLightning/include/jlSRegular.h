@@ -1,49 +1,49 @@
 /*****************************************************************************/
 /**
-	* @file    jlSJittered.h
+	* @file    jlSRegular.h
 	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
-	* @date    31/10/2021
-	* @brief   A class for Jittered sample
+	* @date    1/11/2021
+	* @brief   A class for Regular sample
 	*
 	*
 	* @bug	    No known bugs.
 	*/
-/*****************************************************************************/
+	/*****************************************************************************/
 #pragma once
 #include "Prerequisites.h"
 #include "jlSampler.h"
 #include <jlRandom.h>
 
-class jlSJittered : public jlSampler {
+class jlSRegular : public jlSampler {
  public:
 		/**
 			* @brief default constructor
 			*/
-		jlSJittered() = default;
+		jlSRegular() = default;
 
 		/**
 			* @brief default constructor
 			*/
-		jlSJittered(uint32 numSamples) {
+		jlSRegular(uint32 numSamples) {
 				m_numSamples = numSamples;
 		};
-		
+
 		/**
 			* @brief default destructor
 			*/
-		~jlSJittered() {};
+		~jlSRegular() {};
 
-  /**
-   * @brief generate sample patterns in a unit square
-   */
-  virtual void
-  generateSamples() override {
+		/**
+			* @brief generate sample patterns in a unit square
+			*/
+		virtual void
+		generateSamples() override {
 				auto n = (int32)sqrt(m_numSamples);
 				for (int p = 0; p < m_numSets; p++) {
 						for (int j = 0; j < n; j++) {
 								for (int k = 0; k < n; k++) {
-										jlPoint2 sp((k + jlRandom::randomFloat()) / n, 
-												          (j + jlRandom::randomFloat()) / n);
+										jlPoint2 sp((k + 0.5f) / n,
+												          (j + 0.5f) / n);
 										m_samples.push_back(sp);
 								}
 						}

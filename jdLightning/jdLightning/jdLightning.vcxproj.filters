@@ -80,5 +80,8 @@
     <ClInclude Include="include\jlSJittered.h">
       <Filter>Archivos de encabezado\Samples</Filter>
     </ClInclude>
+    <ClInclude Include="include\jlSRegular.h">
+      <Filter>Archivos de encabezado\Samples</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

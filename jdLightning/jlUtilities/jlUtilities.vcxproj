@@ -191,6 +191,7 @@
     <ClCompile Include="src\jlPlatformMath.cpp" />
     <ClCompile Include="src\jlQuaternion.cpp" />
     <ClCompile Include="src\jlRadian.cpp" />
+    <ClCompile Include="src\jlRandom.cpp" />
     <ClCompile Include="src\jlTimer.cpp" />
     <ClCompile Include="src\jlVector3.cpp" />
   </ItemGroup>

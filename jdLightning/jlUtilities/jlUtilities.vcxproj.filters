@@ -45,6 +45,9 @@
     <ClCompile Include="src\jlVector3.cpp">
       <Filter>Archivos de origen\Maths</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlRandom.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jlPlatformDefines.h">

@@ -41,7 +41,8 @@ class jlTracer {
    */
   virtual jlColor
   traceRay(const jlRay& ray) const {
-    return (0, 0, 0);
+    UNREFERENCED_PARAMETER(ray);
+    return { 0, 0, 0 };
   }
  protected:
  

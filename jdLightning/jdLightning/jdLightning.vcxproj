@@ -202,6 +202,7 @@
     <ClInclude Include="include\jlSampler.h" />
     <ClInclude Include="include\jlShadeRec.h" />
     <ClInclude Include="include\jlSJittered.h" />
+    <ClInclude Include="include\jlSRegular.h" />
     <ClInclude Include="include\jlTMultipleObjects.h" />
     <ClInclude Include="include\jlTracer.h" />
     <ClInclude Include="include\jlTSingleSphere.h" />

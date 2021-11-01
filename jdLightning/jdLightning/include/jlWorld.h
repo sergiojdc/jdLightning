@@ -55,7 +55,7 @@ class jlWorld {
    * @param height is the window's height
    */
   void
-  openWindow(const int width, const int height);
+  openWindow(const uint32 width, const uint32 height);
 
   /**
    * @brief function to update the image
@@ -95,6 +95,12 @@ class jlWorld {
   threadRenderFunctionJitteredSampler(uint32 threadIdx);
 
   /**
+   * @brief function for render with threads and Jittered Sampler
+   */
+  void 
+  threadRenderFunctionSamplerClass(uint32 threadIdx);
+
+  /**
    * @brief function for render normaly without threads
    */
   void 
@@ -117,6 +123,12 @@ class jlWorld {
    */
   void 
   softwareRenderJitteredSampler();
+
+  /**
+   * @brief function for render normaly without threads and Jittered Sampler
+   */
+  void 
+  softwareRenderSamplerClass();
 
   /**
    * @brief function to change color to a pixel
