@@ -6,9 +6,12 @@
 
 #include "jlTSingleSphere.h"
 #include "jlTMultipleObjects.h"
+
 #include "jlGOPlane.h"
 
 #include "jlSJittered.h"
+
+#include "jlCPinhole.h"
 
 void 
 jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
@@ -48,18 +51,23 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_threadsFinished.resize(1);
   }
 
-  SPtr<jlSJittered> sampler(new jlSJittered(255));
+  SPtr<jlSJittered> sampler(new jlSJittered(16));
   //SPtr<jlSRegular> sampler(new jlSRegular(255));
-  m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 255, nullptr);
+  m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 255, sampler);
   sampler->setNumSets(width * height);
   time.reset();
+  //do it// try to change generate samples and shuffledIndices with threads
   std::cout << "generating samples" << std::endl;
   sampler->generateSamples();
-  std::cout << "samples were generated in " << time.getSeconds() << "seconds" << std::endl;
+  std::cout << "samples were generated in " << time.getSeconds() << " seconds" << std::endl;
   time.reset();
   std::cout << "shuffling indices"  << std::endl;
   sampler->setupShuffledIndices();
-  std::cout << "indices shuffled in " << time.getSeconds() << "seconds" << std::endl;
+  std::cout << "indices shuffled in " << time.getSeconds() << " seconds" << std::endl;
+  time.reset();
+  std::cout << "mapping unit disk"  << std::endl;
+  sampler->mapSamplerToUnitDisk();
+  std::cout << "unit disk mapped " << time.getSeconds() << " seconds" << std::endl;
 
   //m_vp.m_numSamples = 16;
   m_backgroundColor = jlColor::Black();
@@ -82,6 +90,18 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   SPtr<jlPlane> newPLane(new jlPlane({ 0,0,0 }, {0,1,1}));
   newPLane->m_color = { 0, 0.3f, 0 };
   addObject(newPLane);
+
+  jlCPinhole* cpinhole = new jlCPinhole;
+  cpinhole->m_viewDistance = 850;
+  cpinhole->m_zoom = 1;
+
+
+  m_pCamera.reset(cpinhole);
+  m_pCamera->m_eye = { 0, 0, 400 };
+  m_pCamera->m_lookAt = { 0,0,0 };
+  m_pCamera->m_up = { 0,1,0 };
+  m_pCamera->m_exposureTime = 1;
+  m_pCamera->computeUVW();
 
   openWindow(width, height);
   updateRender();
@@ -144,18 +164,19 @@ jlWorld::openWindow(const uint32 width, const uint32 height) {
 
 void 
 jlWorld::updateRender() {
-  jlTimer time;
+  //jlTimer time;
   m_renderTime.reset();
-  if (m_bThreading)
-    threadRender();
-  else {
-    m_threads[0] = std::thread(&jlWorld::softwareRenderSimpleSampler, this);
-    m_threads[0].detach();
-    softwareRender();
+  m_pCamera->renderScene(this);
+  //if (m_bThreading)
+  //  threadRender();
+  //else {
+  //  m_threads[0] = std::thread(&jlWorld::softwareRenderSimpleSampler, this);
+  //  m_threads[0].detach();
+  //  softwareRender();
+  //
+  //}
 
-  }
-
-  std::cout << "Milliseconds" << time.getSeconds() << std::endl;
+  //std::cout << "Milliseconds" << time.getSeconds() << std::endl;
 }
 
 void 
@@ -318,7 +339,8 @@ jlWorld::threadRenderFunctionSamplerClass(uint32 threadIdx) {
       uint32 currentX = array[width];
       //Sampler
       for (uint32 p = 0; p < vp.m_numSamples; ++p) {
-        sp = vp.m_pSampler->sampleUnitSquare();
+        //sp = vp.m_pSampler->sampleUnitSquare();
+        sp = vp.m_pSampler->sampleUnitDisk();
         pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
         pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
         ray.m_origin = { pp.x, pp.y, (float)zw };

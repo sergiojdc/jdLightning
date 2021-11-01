@@ -25,6 +25,12 @@
     <Filter Include="Archivos de encabezado\Samples">
       <UniqueIdentifier>{09666ac2-5057-4012-9cbc-88892056329c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Cameras">
+      <UniqueIdentifier>{cbc51320-ccc5-4887-abea-87b7649e71fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Cameras">
+      <UniqueIdentifier>{afcae227-2edd-4e7f-a1da-01a69a9f09fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -41,6 +47,12 @@
     </ClCompile>
     <ClCompile Include="src\jlWorld.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlSampler.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlCPinhole.cpp">
+      <Filter>Archivos de origen\Cameras</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="include\jlSRegular.h">
       <Filter>Archivos de encabezado\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlCamera.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlCPinhole.h">
+      <Filter>Archivos de encabezado\Cameras</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

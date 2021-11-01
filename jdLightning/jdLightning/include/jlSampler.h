@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
-	* @file    jlSample.h
+	* @file    jlSampler.h
 	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
 	* @date    31/10/2021
 	* @brief   A virtual class for any kind of sample
@@ -12,6 +12,7 @@
 #pragma once
 #include "Prerequisites.h"
 #include <jlVector2.h>
+#include <jlVector3.h>
 #include <jlRandom.h>
 
 class jlSampler
@@ -60,23 +61,51 @@ class jlSampler
   shuffleSamples() {}; 
 
   /**
+   * @brief map samplers to unit disk
+   */
+  void
+  mapSamplerToUnitDisk();
+
+  /**
+   * @brief map samplers to hemisphere
+   */
+  void
+  mapSamplesToHemisphere(const float& e);
+
+  /**
    * @brief get next sample on unit square
    */
   jlVector2
   sampleUnitSquare() {
     if (m_count % m_numSamples == 0) // start of a new pixel
-      m_jump = (jlRandom::randomInt0_255() % m_numSets) * m_numSamples;
+      m_jump = (jlRandom::randomInt() % m_numSets) * m_numSamples;
     //uint32 idx = uint32(m_jump + m_count++ % m_numSamples);
     uint32 idxS = uint32(m_jump + m_count++ % m_numSamples);
     uint32 idx = uint32(m_jump + m_shuffledIndices[idxS]);
     return (m_samples[idx]);
-    //return (m_samples[m_jump + m_shuffledIndices[m_jump+ m_count++ % m_numSamples]]);
-    //simple
-    //int index = m_count++ % (m_numSamples * m_numSets);
-    //if (index >= m_samples.size())
-    //  index = m_samples.size() - 1;
-    //return (m_samples[index]);
   };
+
+  /**
+   * @brief get next sample on unit disk
+   */
+  jlVector2
+  sampleUnitDisk() {
+    if (m_countDisk % m_numSamples == 0) // start of a new pixel
+      m_jump = (jlRandom::randomInt() % m_numSets) * m_numSamples;
+    uint32 indx = uint32(m_jump + m_countDisk++ % m_numSamples);
+    return (m_diskSamples[indx]);
+  }
+
+  /**
+   * @brief get next sample on hemisphere
+   */
+  jlVector3
+  sampleHemisphere() {
+    if (m_countHemisphere % m_numSamples == 0) // start of a new pixel
+      m_jump = (jlRandom::randomInt() % m_numSets) * m_numSamples;
+    uint32 indx = uint32(m_jump + m_countHemisphere++ % m_numSamples);
+    return (m_hemisphereSamples[indx]);
+  }
 
   /**
    * @brief function to get the number of samples
@@ -112,6 +141,16 @@ class jlSampler
    * @brief sample points on a unit square
    */
   Vector<jlVector2> m_samples;
+
+  /**
+   * @brief sample points on a unit disk
+   */
+  Vector<jlVector2> m_diskSamples;
+
+  /**
+   * @brief sample points on a hemisphere
+   */
+  Vector<jlVector3> m_hemisphereSamples;
 		
 		/**
    * @brief shuffled samples array indices
@@ -122,6 +161,8 @@ class jlSampler
 			* @brief random index jump
 			*/
 		unsigned long m_count = 0;
+		unsigned long m_countDisk = 0;
+  unsigned long m_countHemisphere = 0;
 
 		/**
 			* @brief random index jump

@@ -44,6 +44,22 @@ class jlTracer {
     UNREFERENCED_PARAMETER(ray);
     return { 0, 0, 0 };
   }
+
+  /**
+   * @brief virtual method for check if the ray hit with geometri with depth
+   * @param ray is the ray with check the hits
+   * @param depth is the depth with check it
+   * @return a color
+   */
+  virtual jlColor
+  traceRay(const jlRay& ray, uint32 depth) {
+    return { 0, 0, 0 };
+  };
+
+  virtual jlColor
+  traceRay(const jlRay& ray, const float& tmin, uint32 depth) {
+    return { 0, 0, 0 };
+  };
  protected:
  
   /**

@@ -22,6 +22,7 @@
 #include "jlTracer.h"
 #include "jlGeometriObject.h"
 #include "jlRay.h"
+#include "jlCamera.h"
 
 class jlWorld {
  public:
@@ -199,6 +200,8 @@ class jlWorld {
    * @brief sprtie which is setted the texture
    */
   sf::Sprite m_sprite;
+
+  SPtr<jlCamera> m_pCamera;
   
   /**
    * @brief if is true is drawing with trheads

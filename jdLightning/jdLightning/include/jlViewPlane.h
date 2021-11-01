@@ -68,6 +68,7 @@ class jlViewPlane {
       m_pSampler->setNumSets(m_wRes * m_hRes);
       m_pSampler->generateSamples();
       m_pSampler->setupShuffledIndices();
+      m_pSampler->mapSamplerToUnitDisk();
     }
   };
   

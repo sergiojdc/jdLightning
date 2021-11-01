@@ -189,13 +189,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\jlCPinhole.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
     <ClCompile Include="src\jlGOSphere.cpp" />
+    <ClCompile Include="src\jlSampler.cpp" />
     <ClCompile Include="src\jlWorld.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\jlCamera.h" />
+    <ClInclude Include="include\jlCPinhole.h" />
     <ClInclude Include="include\jlGeometriObject.h" />
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
