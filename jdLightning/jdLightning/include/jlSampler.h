@@ -11,7 +11,7 @@
 	/*****************************************************************************/
 #pragma once
 #include "Prerequisites.h"
-#include <jlPoint2.h>
+#include <jlVector2.h>
 #include <jlRandom.h>
 
 class jlSampler
@@ -62,8 +62,8 @@ class jlSampler
   /**
    * @brief get next sample on unit square
    */
-  jlPoint2
-    sampleUnitSquare() {
+  jlVector2
+  sampleUnitSquare() {
     if (m_count % m_numSamples == 0) // start of a new pixel
       m_jump = (jlRandom::randomInt0_255() % m_numSets) * m_numSamples;
     //uint32 idx = uint32(m_jump + m_count++ % m_numSamples);
@@ -111,7 +111,7 @@ class jlSampler
   /**
    * @brief sample points on a unit square
    */
-  Vector<jlPoint2> m_samples;
+  Vector<jlVector2> m_samples;
 		
 		/**
    * @brief shuffled samples array indices

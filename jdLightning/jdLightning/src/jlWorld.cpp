@@ -48,9 +48,9 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_threadsFinished.resize(1);
   }
 
-  //SPtr<jlSJittered> sampler(new jlSJittered(16));
-  SPtr<jlSRegular> sampler(new jlSRegular(16));
-  m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 16, sampler);
+  SPtr<jlSJittered> sampler(new jlSJittered(255));
+  //SPtr<jlSRegular> sampler(new jlSRegular(255));
+  m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 255, nullptr);
   sampler->setNumSets(width * height);
   time.reset();
   std::cout << "generating samples" << std::endl;
@@ -61,7 +61,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   sampler->setupShuffledIndices();
   std::cout << "indices shuffled in " << time.getSeconds() << "seconds" << std::endl;
 
-  m_vp.m_numSamples = 16;
+  //m_vp.m_numSamples = 16;
   m_backgroundColor = jlColor::Black();
 
   //m_pTracer.reset(new jlTSingleSphere(this));
@@ -161,6 +161,7 @@ jlWorld::updateRender() {
 void 
 jlWorld::threadRender() {
   for (uint32 i = 0; i < m_numCpus; i++) {
+    //m_threads[i] = std::thread(&jlWorld::threadRenderFunctionJitteredSampler, this, i);
     m_threads[i] = std::thread(&jlWorld::threadRenderFunctionSamplerClass, this, i);
   }
   for (uint32 i = 0; i < m_numCpus; i++) {
@@ -186,7 +187,7 @@ jlWorld::threadRenderFunction(uint32 threadIdx) {
       uint32 currentX = array[width];
       x = vp.m_pixelSize * (currentX - 0.5 * (vp.m_wRes - 1.0));
       y = vp.m_pixelSize * (height - 0.5 * (vp.m_hRes - 1.0));
-      ray.m_origin = { x, y, zw };
+      ray.m_origin = { (float)x, (float)y, (float)zw };
       pixelColor = m_pTracer->traceRay(ray);
       displayPixel(currentX, height, pixelColor);
     }
@@ -205,7 +206,7 @@ void jlWorld::threadRenderFunctionSimpleSampler(uint32 threadIdx) {
 
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 width = 0; width < threadWidth; ++width) { // up
@@ -215,9 +216,9 @@ void jlWorld::threadRenderFunctionSimpleSampler(uint32 threadIdx) {
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
         for (uint32 q = 0; q < n; ++q) {
-          pp.x = int32(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes +(q + 0.5f) /n));
-          pp.y = int32(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + 0.5f) /n));
-          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pp.x = float(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes +(q + 0.5f) /n));
+          pp.y = float(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + 0.5f) /n));
+          ray.m_origin = { (float)pp.x, (float)pp.y, (float)zw };
           pixelColor += m_pTracer->traceRay(ray);
         }
       }
@@ -240,7 +241,7 @@ jlWorld::threadRenderFunctionRandomSampler(uint32 threadIdx) {
 
   uint32 n = (uint32)m_vp.m_numSamples;
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 width = 0; width < threadWidth; ++width) { // up
@@ -249,9 +250,9 @@ jlWorld::threadRenderFunctionRandomSampler(uint32 threadIdx) {
       uint32 currentX = array[width];
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
-        pp.x = int32(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + jlRandom::randomFloat()));
-        pp.y = int32(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + jlRandom::randomFloat()));
-        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pp.x = float(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + jlRandom::randomFloat()));
+        pp.y = float(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + jlRandom::randomFloat()));
+        ray.m_origin = { pp.x, pp.y, (float)zw };
         pixelColor += m_pTracer->traceRay(ray);
       }
       pixelColor /= (float)n;
@@ -273,7 +274,7 @@ jlWorld::threadRenderFunctionJitteredSampler(uint32 threadIdx) {
 
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 width = 0; width < threadWidth; ++width) { // up
@@ -283,9 +284,9 @@ jlWorld::threadRenderFunctionJitteredSampler(uint32 threadIdx) {
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
         for (uint32 q = 0; q < n; ++q) {
-          pp.x = (int32)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + (q + jlRandom::randomFloat()) / n));
-          pp.y = (int32)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + jlRandom::randomFloat()) / n));
-          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + (q + jlRandom::randomFloat()) / n));
+          pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + (p + jlRandom::randomFloat()) / n));
+          ray.m_origin = { pp.x, pp.y, (float)zw };
           pixelColor += m_pTracer->traceRay(ray);
         }
       }
@@ -306,10 +307,9 @@ jlWorld::threadRenderFunctionSamplerClass(uint32 threadIdx) {
   auto array = m_IndexImageWidth[threadIdx];
   auto vp = m_vp;
 
-  uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
-  jlPoint2 sp; //sampler Point
+  jlVector2 pp;
+  jlVector2 sp; //sampler Point
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 width = 0; width < threadWidth; ++width) { // up
@@ -319,9 +319,9 @@ jlWorld::threadRenderFunctionSamplerClass(uint32 threadIdx) {
       //Sampler
       for (uint32 p = 0; p < vp.m_numSamples; ++p) {
         sp = vp.m_pSampler->sampleUnitSquare();
-        pp.x = (int32)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
-        pp.y = (int32)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
-        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
+        pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
+        ray.m_origin = { pp.x, pp.y, (float)zw };
         pixelColor += m_pTracer->traceRay(ray);
       }
       pixelColor /= (float)vp.m_numSamples;
@@ -343,7 +343,7 @@ jlWorld::softwareRender() {
     for (uint32 cheight = 0; cheight < m_vp.m_hRes; ++cheight) { // across 
       x = m_vp.m_pixelSize * (cwidth - 0.5 * (m_vp.m_wRes - 1.0));
       y = m_vp.m_pixelSize * (cheight - 0.5 * (m_vp.m_hRes - 1.0));
-      ray.m_origin = { x, y, zw };
+      ray.m_origin = { (float)x, (float)y, (float)zw };
       pixelColor += m_pTracer->traceRay(ray);
       displayPixel(cwidth, cheight, pixelColor);
     }
@@ -358,7 +358,7 @@ void jlWorld::softwareRenderSimpleSampler() {
 
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
@@ -367,9 +367,9 @@ void jlWorld::softwareRenderSimpleSampler() {
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
         for (uint32 q = 0; q < n; ++q) {
-          pp.x = int32(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + 0.5f) / n));
-          pp.y = int32(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + 0.5f) / n));
-          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pp.x = float(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + 0.5f) / n));
+          pp.y = float(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + 0.5f) / n));
+          ray.m_origin = { pp.x, pp.y, (float)zw };
           pixelColor = m_pTracer->traceRay(ray);
         }
       }
@@ -389,7 +389,7 @@ jlWorld::softwareRenderRandomSampler() {
 
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
@@ -397,9 +397,9 @@ jlWorld::softwareRenderRandomSampler() {
       pixelColor = black;
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
-        pp.x = int32(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + jlRandom::randomFloat()));
-        pp.y = int32(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + jlRandom::randomFloat()));
-        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pp.x = float(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + jlRandom::randomFloat()));
+        pp.y = float(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + jlRandom::randomFloat()));
+        ray.m_origin = { pp.x, pp.y, (float)zw };
         pixelColor += m_pTracer->traceRay(ray);
       }
 
@@ -418,7 +418,7 @@ jlWorld::softwareRenderJitteredSampler() {
 
   uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
+  jlVector2 pp;
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
@@ -427,9 +427,9 @@ jlWorld::softwareRenderJitteredSampler() {
       //Sampler
       for (uint32 p = 0; p < n; ++p) {
         for (uint32 q = 0; q < n; ++q) {
-          pp.x = int32(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + jlRandom::randomFloat()) / n));
-          pp.y = int32(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + jlRandom::randomFloat()) / n));
-          ray.m_origin = { pp.x, pp.y, (int32)zw };
+          pp.x = float(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + (q + jlRandom::randomFloat()) / n));
+          pp.y = float(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + (p + jlRandom::randomFloat()) / n));
+          ray.m_origin = { pp.x, pp.y, (float)zw };
           pixelColor = m_pTracer->traceRay(ray);
         }
       }
@@ -447,10 +447,9 @@ jlWorld::softwareRenderSamplerClass() {
   jlRay ray;
   double zw = 100.0;
 
-  uint32 n = (uint32)Math::sqrt((float)m_vp.m_numSamples);
   auto black = jlColor::Black();
-  jlPoint2 pp;
-  jlPoint2 sp;//Sampler point
+  jlVector2 pp;
+  jlVector2 sp;//Sampler point
 
   ray.m_direction = { 0, 0, -1 };
   for (uint32 cwidth = 0; cwidth < m_vp.m_wRes; ++cwidth) { // up
@@ -459,9 +458,9 @@ jlWorld::softwareRenderSamplerClass() {
       //Sampler
       for (uint32 s = 0; s < m_vp.m_numSamples; ++s) {
         sp = m_vp.m_pSampler->sampleUnitSquare();
-        pp.x = int32(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + sp.x));
-        pp.y = int32(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + sp.y));
-        ray.m_origin = { pp.x, pp.y, (int32)zw };
+        pp.x = float(m_vp.m_pixelSize * (cwidth - 0.5 * m_vp.m_wRes + sp.x));
+        pp.y = float(m_vp.m_pixelSize * (cheight - 0.5 * m_vp.m_hRes + sp.y));
+        ray.m_origin = { pp.x, pp.y, (float)zw };
         pixelColor = m_pTracer->traceRay(ray);
       }
 

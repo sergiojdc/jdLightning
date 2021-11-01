@@ -53,7 +53,7 @@ public:
   /**
    * @brief world coordinates of hit point
    */
-  jlPoint3 m_localHitPoint;
+  jlVector3 m_localHitPoint;
 
   /**
    * @brief normal at hit point

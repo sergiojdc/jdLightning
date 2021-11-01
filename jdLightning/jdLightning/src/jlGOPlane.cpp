@@ -2,7 +2,7 @@
 
 const double jlPlane::kEpsilon = 0.00001;
 
-jlPlane::jlPlane(const jlPoint3 point, const jlNormal& normal) {
+jlPlane::jlPlane(const jlVector3 point, const jlNormal& normal) {
   m_point = point;
   m_normal = normal;
 }

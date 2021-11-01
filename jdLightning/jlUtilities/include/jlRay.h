@@ -76,7 +76,7 @@ namespace jlUtilitiesSDK
 				/**
 					* @brief ray's origin
 					*/
-				jlPoint3 m_origin;
+				jlVector3 m_origin;
 
 				/**
 					* @brief ray's direction

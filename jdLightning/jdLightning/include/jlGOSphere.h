@@ -11,6 +11,7 @@
 /*****************************************************************************/
 #pragma once
 #include "jlGeometriObject.h"
+#include "jlVector3.h"
 
 class jlSphere : public jlGeometricObject {
  public:
@@ -24,7 +25,7 @@ class jlSphere : public jlGeometricObject {
    * @param point is the plane's point
    * @param normal is the plane's normal
    */
-  jlSphere(const jlPoint3 pos, const float& ratio);
+  jlSphere(const jlVector3 pos, const float& ratio);
 
   /**
    * @brief function to detected a hit
@@ -43,7 +44,7 @@ class jlSphere : public jlGeometricObject {
   /**
    * @brief point through which
    */
-  jlPoint3 m_position;
+  jlVector3 m_position;
 
   /**
    * @brief normal to the plane

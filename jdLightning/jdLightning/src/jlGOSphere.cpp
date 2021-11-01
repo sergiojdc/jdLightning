@@ -2,7 +2,7 @@
 
 const double jlSphere::kEpsilon = 0.00001;
 
-jlSphere::jlSphere(const jlPoint3 pos, const float& ratio) {
+jlSphere::jlSphere(const jlVector3 pos, const float& ratio) {
   m_position = pos;
   m_radius = ratio;
 }
