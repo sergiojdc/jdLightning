@@ -59,7 +59,12 @@ class jlCPinhole : public jlCamera {
   renderThread(jlWorld* world, int threadIdx);
 
   jlVector3
-  classSamplerRender(int x, int y, jlWorld* world, jlRay& ray) {};
+  classSamplerRender(int x, int y, jlWorld* world, jlRay& ray) {
+    UNREFERENCED_PARAMETER(x);
+    UNREFERENCED_PARAMETER(y);
+    UNREFERENCED_PARAMETER(world);
+    UNREFERENCED_PARAMETER(ray);
+  };
 
   /**
    * @brief the view-plane distance

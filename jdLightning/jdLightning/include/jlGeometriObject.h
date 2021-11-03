@@ -44,5 +44,9 @@ class jlGeometricObject {
 			*/
   jlColor m_color; // only used in first step
 
+	 /**
+	 	* @brief object Material
+	 	*/
+		SPtr<jlMaterial> m_pMaterial;
 		//Material* m_pMaterial;
 };

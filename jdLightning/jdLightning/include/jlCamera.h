@@ -44,19 +44,25 @@ class jlCamera {
    * @brief function to render the scene
    */
   virtual void
-  renderScene(jlWorld* world) {};
+  renderScene(jlWorld* world) {
+    UNREFERENCED_PARAMETER(world);
+  };
 
   /**
    * @brief function to render the scene
    */
   virtual void
-  renderSceneThreading(jlWorld* world) {};
+  renderSceneThreading(jlWorld* world) {
+    UNREFERENCED_PARAMETER(world);
+  };
 
   /**
    * @brief function to render the scene
    */
   virtual void
-  renderSceneSoftware(jlWorld* world) {};
+  renderSceneSoftware(jlWorld* world) {
+    UNREFERENCED_PARAMETER(world);
+  };
 
   /**
    * @brief the camera's position

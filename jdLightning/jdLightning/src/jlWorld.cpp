@@ -3,20 +3,28 @@
 #include <jlVector4.h>
 #include <jlTimer.h>
 #include <jlRandom.h>
-
+//Tracers
 #include "jlTSingleSphere.h"
 #include "jlTMultipleObjects.h"
-
+#include "jlTRayCast.h"
+//Geometri objects
 #include "jlGOPlane.h"
-
+//Samplers
 #include "jlSJittered.h"
-
+//Cameras
 #include "jlCPinhole.h"
+//Lights
+#include "jlLAmbient.h"
+#include "jlPointLight.h"
+//Materials
+#include "jlMMatte.h"
 
 void 
 jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   m_bThreading = activeThreading;
-
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Prepare threads
+//////////////////////////////////////////////////////////////////////////////////////////////
   jlTimer time;
   if (m_bThreading) {
     m_numCpus = (uint32)std::thread::hardware_concurrency();
@@ -24,6 +32,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_threads.resize(m_numCpus);
     m_IndexImageWidth.resize(m_numCpus);
     m_threadsFinished.resize(m_numCpus);
+    m_threadsFinishedFirst.resize(m_numCpus);
     uint32 widthPerCpus = width / m_numCpus; // get number of pixel on widht per cpu
     uint32 CpusWithExtra = height % m_numCpus; // check if have decimal to repart the extra width
 
@@ -34,6 +43,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
       //Get width pixels per cpu
       uint32 numIndexWidth = widthPerCpus;
       m_threadsFinished[i] = false;
+      m_threadsFinishedFirst[i] = false;
       if (i < CpusWithExtra) {  
         numIndexWidth++;
       }
@@ -49,9 +59,12 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_numCpus = 1;
     m_threads.resize(1);
     m_threadsFinished.resize(1);
+    m_threadsFinishedFirst.resize(1);
   }
-
-  SPtr<jlSJittered> sampler(new jlSJittered(16));
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Prepare view plane and samples
+//////////////////////////////////////////////////////////////////////////////////////////////
+  SPtr<jlSJittered> sampler(new jlSJittered(1));
   //SPtr<jlSRegular> sampler(new jlSRegular(255));
   m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 255, sampler);
   sampler->setNumSets(width * height);
@@ -68,33 +81,64 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   std::cout << "mapping unit disk"  << std::endl;
   sampler->mapSamplerToUnitDisk();
   std::cout << "unit disk mapped " << time.getSeconds() << " seconds" << std::endl;
-
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Set background color
+//////////////////////////////////////////////////////////////////////////////////////////////
   //m_vp.m_numSamples = 16;
   m_backgroundColor = jlColor::Black();
 
-  //m_pTracer.reset(new jlTSingleSphere(this));
-  m_pTracer.reset(new jlTMultipleObjects(this));
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+// set Tracer
+//////////////////////////////////////////////////////////////////////////////////////////////
+  //m_pTracer.reset(new jlTSingleSphere(this));
+  //m_pTracer.reset(new jlTMultipleObjects(this));
+  m_pTracer.reset(new jlTRayCast(this));
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Create and add objects to scene wiht their materials
+//////////////////////////////////////////////////////////////////////////////////////////////
   m_sphere = jlSphere({0,0,0}, 40.0f);
 
+  SPtr<jlMMatte> matte(new jlMMatte);
+  matte->setKa(0);
+  matte->setKd(1);
+  matte->setCd({ 1, 1, 0 });
   SPtr<jlSphere> newSphere(new jlSphere);
   newSphere->m_position = { 0, -25, 0 };
   newSphere->m_radius = 80.0f;
   newSphere->m_color = { 1,0,0 };
+  newSphere->m_pMaterial = matte;
   addObject(newSphere);
 
-  newSphere.reset(new jlSphere({ 0,30,0 }, 60));
-  newSphere->m_color = { 1,1,0 };
-  addObject(newSphere);
+  //newSphere.reset(new jlSphere({ 0,30,0 }, 60));
+  //newSphere->m_color = { 1,1,0 };
+  //addObject(newSphere);
+  //
+  //SPtr<jlPlane> newPLane(new jlPlane({ 0,0,0 }, {0,1,1}));
+  //newPLane->m_color = { 0, 0.3f, 0 };
+  //addObject(newPLane);
 
-  SPtr<jlPlane> newPLane(new jlPlane({ 0,0,0 }, {0,1,1}));
-  newPLane->m_color = { 0, 0.3f, 0 };
-  addObject(newPLane);
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Create and add Lights to scene
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+  m_pAmbientLight.reset(new jlLAmbient(1, {1, 1, 1}));
+
+  SPtr<jlPointLight> pointLight(new jlPointLight);
+  pointLight->setPosition({100, 50, 50});
+  pointLight->setRadianceScalingFactor(3.0f);
+  addLight(pointLight);
+  m_pPointLight = pointLight;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Configure and set camera
+//////////////////////////////////////////////////////////////////////////////////////////////
   jlCPinhole* cpinhole = new jlCPinhole;
   cpinhole->m_viewDistance = 850;
   cpinhole->m_zoom = 1;
-
 
   m_pCamera.reset(cpinhole);
   m_pCamera->m_eye = { 0, 0, 400 };
@@ -103,6 +147,10 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   m_pCamera->m_exposureTime = 1;
   m_pCamera->computeUVW();
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// open window and update the image
+//////////////////////////////////////////////////////////////////////////////////////////////
   openWindow(width, height);
   updateRender();
 }
@@ -113,7 +161,7 @@ void jlWorld::renderScene() {
     if (!m_allThreadFinished) {
       m_allThreadFinished = true;
       for (uint32 i = 0; i < m_numCpus; i++) {
-        if (!m_threadsFinished[i]) {
+        if (!m_threadsFinishedFirst[i]) {
           m_allThreadFinished = false;
           break;
         }
@@ -124,12 +172,23 @@ void jlWorld::renderScene() {
     }
     // check all the window's events that were triggered since the last iteration of the loop
     sf::Event event;
+    sf::Clock deltaClock;
     while (m_window->pollEvent(event))
     {
+      ImGui::SFML::ProcessEvent(event);
       // "close requested" event: we close the window
-      if (event.type == sf::Event::Closed)
+      if (event.type == sf::Event::Closed) {
         m_window->close();
+        run = false;
+      }
     }
+    ImGui::SFML::Update(*m_window, deltaClock.restart());
+    
+    //ImGui::Begin("Hello, world!");
+    //ImGui::Button("Look at this pretty button");
+    //ImGui::End();
+
+    modifyPointlight();
 
     m_texture.update(m_image);
     m_sprite.setTexture(m_texture);
@@ -139,15 +198,29 @@ void jlWorld::renderScene() {
     //m_camera->renderScenePerFrame(this);
     m_window->clear(backGround);
     m_window->draw(m_sprite);
+    ImGui::SFML::Render(*m_window);
     m_window->display();
   }
+
+  m_allThreadFinished = false;
+  while (!m_allThreadFinished) {
+    m_allThreadFinished = true;
+    for (uint32 i = 0; i < m_numCpus; i++) {
+      if (!m_threadsFinished[i]) {
+        m_allThreadFinished = false;
+        break;
+      }
+    }
+  }
+
+  ImGui::SFML::Shutdown();
 }
 
 void 
 jlWorld::openWindow(const uint32 width, const uint32 height) {
   m_window = new sf::RenderWindow(sf::VideoMode(width, height), "My window");
   // Create a image filled with black color
-
+  ImGui::SFML::Init(*m_window);
   sf::Color backGround((uint8)m_backgroundColor.x, 
                        (uint8)m_backgroundColor.y, 
                        (uint8)m_backgroundColor.z);
@@ -495,7 +568,16 @@ jlWorld::softwareRenderSamplerClass() {
 
 void
 jlWorld::displayPixel(const int x, const int y, const jlColor& pixel_color) {
-  auto color = pixel_color.getIn255();
+  //auto color = pixel_color.getIn255();
+  jlColor color;
+  if (m_vp.m_bShowOutOfGamut)
+    color = clampToColor(pixel_color);
+  else
+    color = maxToOne(pixel_color);
+  
+  if (m_vp.m_gamma != 1.0)
+    color = color.powc(m_vp.m_invGamma);
+
   sf::Color sfColor((uint8)color.x, (uint8)color.y, (uint8)color.z);
   m_image.setPixel(x, y, sfColor);
 }
@@ -514,4 +596,66 @@ jlWorld::hitBareBonesObjects(const jlRay& ray) {
     }
   }
   return sr;
+}
+
+jlShadeRec 
+jlWorld::hitObjects(const jlRay& ray) {
+  jlShadeRec sr(this);
+  double t;
+  jlNormal normal;
+  jlVector3 localHitPoint;
+
+  float tmin = HUGE_VAL;
+  uint32 numObjects = (uint32)m_sceneObjects.size();
+
+  for (uint32 i = 0; i < numObjects; ++i) {
+    if (m_sceneObjects[i]->hit(ray, t, sr) && (t < tmin)) {
+      sr.m_hitAnObject = true;
+      tmin = (float)t;
+      sr.m_pMaterial = m_sceneObjects[i]->m_pMaterial;
+      sr.m_HitPoint = ray.m_origin + ((float)t * ray.m_direction);
+      normal = sr.m_normal;
+      localHitPoint = sr.m_localHitPoint;
+    }
+  }
+  if (sr.m_hitAnObject) {
+    sr.m_t = tmin; //check this
+    sr.m_depth = (int32)tmin;
+    sr.m_normal = normal;
+    sr.m_localHitPoint = localHitPoint;
+  }
+  return sr;
+}
+
+jlColor 
+jlWorld::maxToOne(const jlColor& color) const {
+  float max_value = std::max(color.r, std::max(color.g, color.b));
+  if (max_value > 1.0)
+    return (color / max_value);
+    
+  return (color);
+}
+
+jlColor 
+jlWorld::clampToColor(const jlColor& color) const {
+  jlColor c(color);
+  if (color.r > 1.0 || color.g > 1.0 || color.b > 1.0) {
+    c.r = 1.0; c.g = 0.0; c.b = 0.0;
+  }
+  return (c);
+}
+
+void 
+jlWorld::modifyPointlight() {
+  ImGui::Begin("pointLight");
+  auto point = std::static_pointer_cast<jlPointLight>(m_pPointLight);
+  auto pos = point->getPosition();
+  ImGui::DragFloat3("Position", &pos.x);
+  point->setPosition(pos);
+
+  auto col = point->getColor();
+  ImGui::ColorEdit3("Position", &col.x);
+  point->setColor(col);
+
+  ImGui::End();
 }

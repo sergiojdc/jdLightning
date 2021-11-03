@@ -31,6 +31,27 @@
     <Filter Include="Archivos de origen\Cameras">
       <UniqueIdentifier>{afcae227-2edd-4e7f-a1da-01a69a9f09fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\BRDFs">
+      <UniqueIdentifier>{a3c4ca96-2fe6-449d-a0b9-7678054492ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\BRDFs">
+      <UniqueIdentifier>{ddebd422-6b5b-4e9a-ad23-cbbaa11f6fff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Lights">
+      <UniqueIdentifier>{ecdbf0e1-1e5b-4773-a8ab-fcd38e126a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Lights">
+      <UniqueIdentifier>{3ae6dbbb-f359-43db-80b3-0c9dcb4196d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Materials">
+      <UniqueIdentifier>{2a13a898-9fb6-4d33-885a-75a838f7fda2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Materials">
+      <UniqueIdentifier>{3b97c4a2-92fa-41c8-bc29-69c78a9d390a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{5fd09538-22aa-4c09-a914-0bc9d005d02c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -53,6 +74,30 @@
     </ClCompile>
     <ClCompile Include="src\jlCPinhole.cpp">
       <Filter>Archivos de origen\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlBRDFLambertian.cpp">
+      <Filter>Archivos de origen\BRDFs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlPointLight.cpp">
+      <Filter>Archivos de origen\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlMMatte.cpp">
+      <Filter>Archivos de origen\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui-SFML.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +145,30 @@
     </ClInclude>
     <ClInclude Include="include\jlCPinhole.h">
       <Filter>Archivos de encabezado\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlBRDF.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlBRDFLambertian.h">
+      <Filter>Archivos de encabezado\BRDFs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlLight.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlLAmbient.h">
+      <Filter>Archivos de encabezado\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlPointLight.h">
+      <Filter>Archivos de encabezado\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlTRayCast.h">
+      <Filter>Archivos de encabezado\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlMaterial.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlMMatte.h">
+      <Filter>Archivos de encabezado\Materials</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

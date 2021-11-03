@@ -24,15 +24,15 @@ jlSphere::hit(const jlRay& ray, double& tmin, jlShadeRec& sr) {
     t = (-b - e) / denom; // smaller root
     if (t > kEpsilon) {
       tmin = t;
-      sr.m_normal = (temp + t * ray.m_direction) / m_radius;
-      sr.m_localHitPoint = ray.m_origin + t * ray.m_direction;
+      sr.m_normal = (temp + (float)t * ray.m_direction) / m_radius;
+      sr.m_localHitPoint = ray.m_origin + (float)t * ray.m_direction;
       return true;
     }
     t = (-b + e) / denom; // larger root
     if (t > kEpsilon) {
       tmin = t;
-      sr.m_normal = (temp + t * ray.m_direction) / m_radius;
-      sr.m_localHitPoint = ray.m_origin + t * ray.m_direction;
+      sr.m_normal = (temp + (float)t * ray.m_direction) / m_radius;
+      sr.m_localHitPoint = ray.m_origin + (float)t * ray.m_direction;
       return true;
     }
   }

@@ -99,7 +99,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/dependencies/imgui/include/;./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)freeglut/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SupportJustMyCode>false</SupportJustMyCode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -110,9 +110,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)freeglut/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformShortName)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>jlUtilitiesd.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>jlUtilitiesd.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;openal32.lib;ImGui-SFML.lib;glu32.lib;freetype.lib;ogg.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,7 +123,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/dependencies/imgui/include/;./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)freeglut/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -135,9 +135,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)freeglut/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformShortName)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>jlUtilities.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>jlUtilities.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;openal32.lib;ImGui-SFML.lib;glu32.lib;freetype.lib;ogg.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,7 +147,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/dependencies/imgui/include/;./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)freeglut/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SupportJustMyCode>false</SupportJustMyCode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -158,9 +158,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)freeglut/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformShortName)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>jlUtilitiesd.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>jlUtilitiesd.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;openal32.lib;ImGui-SFML.lib;glu32.lib;freetype.lib;ogg.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -171,7 +171,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/dependencies/imgui/include/;./include/;$(SolutionDir)jlUtilities/Include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)freeglut/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -183,32 +183,48 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(PlatformShortName)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)freeglut/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformShortName)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>jlUtilities.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>jlUtilities.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;openal32.lib;ImGui-SFML.lib;glu32.lib;freetype.lib;ogg.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\imgui\include\imgui-SFML.cpp" />
+    <ClCompile Include="..\dependencies\imgui\include\imgui.cpp" />
+    <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp" />
+    <ClCompile Include="..\dependencies\imgui\include\imgui_tables.cpp" />
+    <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp" />
+    <ClCompile Include="src\jlBRDFLambertian.cpp" />
     <ClCompile Include="src\jlCPinhole.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
     <ClCompile Include="src\jlGOSphere.cpp" />
+    <ClCompile Include="src\jlMMatte.cpp" />
+    <ClCompile Include="src\jlPointLight.cpp" />
     <ClCompile Include="src\jlSampler.cpp" />
     <ClCompile Include="src\jlWorld.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\jlBRDF.h" />
+    <ClInclude Include="include\jlBRDFLambertian.h" />
     <ClInclude Include="include\jlCamera.h" />
     <ClInclude Include="include\jlCPinhole.h" />
     <ClInclude Include="include\jlGeometriObject.h" />
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
+    <ClInclude Include="include\jlLAmbient.h" />
+    <ClInclude Include="include\jlLight.h" />
+    <ClInclude Include="include\jlMaterial.h" />
+    <ClInclude Include="include\jlMMatte.h" />
+    <ClInclude Include="include\jlPointLight.h" />
     <ClInclude Include="include\jlSampler.h" />
     <ClInclude Include="include\jlShadeRec.h" />
     <ClInclude Include="include\jlSJittered.h" />
     <ClInclude Include="include\jlSRegular.h" />
     <ClInclude Include="include\jlTMultipleObjects.h" />
     <ClInclude Include="include\jlTracer.h" />
+    <ClInclude Include="include\jlTRayCast.h" />
     <ClInclude Include="include\jlTSingleSphere.h" />
     <ClInclude Include="include\jlViewPlane.h" />
     <ClInclude Include="include\jlWorld.h" />

@@ -54,10 +54,11 @@ jlCPinhole::renderSceneSoftware(jlWorld* world) {
         pp.x = float(vp.m_pixelSize * (cwidth - 0.5 * vp.m_wRes + sp.x));
         pp.y = float(vp.m_pixelSize * (cheight - 0.5 * vp.m_hRes + sp.y));
         ray.m_direction = rayDirection(pp);
-        L += world->m_pTracer->traceRay(ray);
+        //L += world->m_pTracer->traceRay(ray);
+        L += world->m_pTracer->traceRay(ray, depth);
       }
 
-      L /= vp.m_numSamples;
+      L /= (float)vp.m_numSamples;
       L *= m_exposureTime;
       world->displayPixel(cwidth, cheight, L);
     }
@@ -80,24 +81,34 @@ jlCPinhole::renderThread(jlWorld* world, int threadIdx) {
   uint32 threadWidth = (uint32)world->m_IndexImageWidth[threadIdx].size();
   auto array = world->m_IndexImageWidth[threadIdx];
 
-
-  for (uint32 width = 0; width < threadWidth; ++width) { // up
-    for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
-      L = jlColor::Black();
-      uint32 currentX = array[width];
-
-      for (int j = 0; j < vp.m_numSamples; j++) {
-        sp = vp.m_pSampler->sampleUnitSquare();
-        pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
-        pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
-        ray.m_direction = rayDirection(pp);
-        L += world->m_pTracer->traceRay(ray);
+  while (world->run) {
+    if (!world->run)
+      break;
+    for (uint32 width = 0; width < threadWidth; ++width) { // up
+      if (!world->run)
+        break;
+      for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
+        if (!world->run)
+          break;
+        L = jlColor::Black();
+        uint32 currentX = array[width];
+        
+        for (uint32 j = 0; j < vp.m_numSamples; j++) {
+          sp = vp.m_pSampler->sampleUnitSquare();
+          pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
+          pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
+          ray.m_direction = rayDirection(pp);
+          //L += world->m_pTracer->traceRay(ray);
+          L += world->m_pTracer->traceRay(ray, depth);
+        }
+        L /= (float)vp.m_numSamples;
+        L *= m_exposureTime;
+        world->displayPixel(currentX, height, L);
       }
-      L /= vp.m_numSamples;
-      L *= m_exposureTime;
-      world->displayPixel(currentX, height, L);
     }
-  }
 
-  world->m_threadsFinished[threadIdx] = true;
+    world->m_threadsFinishedFirst[threadIdx] = true;
+  }
+    world->m_threadsFinished[threadIdx] = true;
+  
 }

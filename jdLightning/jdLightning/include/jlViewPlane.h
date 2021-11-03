@@ -112,4 +112,9 @@ class jlViewPlane {
    * @brief sampler to use
    */
   SPtr<jlSampler> m_pSampler;
+
+  /**
+   * @brief to show color out of gamma
+   */
+  bool m_bShowOutOfGamut = false;
 };

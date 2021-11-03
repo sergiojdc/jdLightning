@@ -16,13 +16,18 @@
 #include <SFML/Graphics.hpp>
 #include <jlColor.h>
 #include <jlTimer.h>
+#include <jlRay.h>
 
 #include "jlViewPlane.h"
 #include "jlGOSphere.h"
 #include "jlTracer.h"
 #include "jlGeometriObject.h"
-#include "jlRay.h"
 #include "jlCamera.h"
+#include "jlLight.h"
+#include <GL/freeglut.h>
+#include <GL/GL.h>
+#include <imgui.h>
+#include <imgui-SFML.h>
 
 class jlWorld {
  public:
@@ -81,7 +86,6 @@ class jlWorld {
    */
   void 
   threadRenderFunctionSimpleSampler(uint32 threadIdx);
-
 
   /**
    * @brief function for render with threads and Random Sampler
@@ -147,6 +151,15 @@ class jlWorld {
   addObject(WeakSptr<jlGeometricObject> object) {
     m_sceneObjects.push_back(object.lock());
   }
+  
+  /**
+   * @brief function to add object to the scene
+   * @param object is the new object to add
+   */
+  void
+  addLight(WeakSptr<jlLight> light) {
+    m_sceneLights.push_back(light.lock());
+  }
 
   /**
    * @brief function to check hits with many objects
@@ -154,6 +167,26 @@ class jlWorld {
    */
   jlShadeRec 
   hitBareBonesObjects(const jlRay& ray);
+
+  /**
+   * @brief function to check hits with many objects with Materials
+   */
+  jlShadeRec
+  hitObjects(const jlRay& ray);
+
+  /**
+   * @brief function clamp the color to the max value in r, g or b
+   * @return the result color
+   */
+  jlColor
+  maxToOne(const jlColor& color) const;
+
+  /**
+   * @brief function clamp the color to 1 if r, g or b are major than 1
+   * @return the result color
+   */
+  jlColor
+  clampToColor(const jlColor& color) const;
 
   /**
    * @brief view plane
@@ -201,7 +234,21 @@ class jlWorld {
    */
   sf::Sprite m_sprite;
 
+  /**
+   * @brief default camera to render
+   */
   SPtr<jlCamera> m_pCamera;
+  
+  /**
+   * @brief ambient light
+   */
+  SPtr<jlLight> m_pAmbientLight = nullptr;
+  SPtr<jlLight> m_pPointLight = nullptr;
+
+  /**
+   * @brief vector with lights in scene
+   */
+  Vector<SPtr<jlLight>> m_sceneLights;
   
   /**
    * @brief if is true is drawing with trheads
@@ -227,6 +274,12 @@ class jlWorld {
    * @brief members for thread debug
    */
   Vector<bool> m_threadsFinished; // to check if all finished
+  Vector<bool> m_threadsFinishedFirst; // to check if all finished
   jlTimer m_renderTime; // to check the time of render, not only for thread 
   bool m_allThreadFinished = false;// for no chek the time again
+
+
+  void 
+  modifyPointlight();
+  bool run = true;
 };

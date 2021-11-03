@@ -52,12 +52,24 @@ class jlTracer {
    * @return a color
    */
   virtual jlColor
-  traceRay(const jlRay& ray, uint32 depth) {
+  traceRay(const jlRay& ray, uint32 depth) const {
+    UNREFERENCED_PARAMETER(ray);
+    UNREFERENCED_PARAMETER(depth);
     return { 0, 0, 0 };
   };
 
+  /**
+   * @brief virtual method for check if the ray hit with geometri with depth
+   * @param ray is the ray with check the hits
+   * @param tmin is the current nearlers 
+   * @param depth is the depth with check it
+   * @return a color
+   */
   virtual jlColor
-  traceRay(const jlRay& ray, const float& tmin, uint32 depth) {
+  traceRay(const jlRay& ray, const float& tmin, uint32 depth) const {
+    UNREFERENCED_PARAMETER(ray);
+    UNREFERENCED_PARAMETER(tmin);
+    UNREFERENCED_PARAMETER(depth);
     return { 0, 0, 0 };
   };
  protected:
