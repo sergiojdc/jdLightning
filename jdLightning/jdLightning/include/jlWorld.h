@@ -278,8 +278,114 @@ class jlWorld {
   jlTimer m_renderTime; // to check the time of render, not only for thread 
   bool m_allThreadFinished = false;// for no chek the time again
 
+  /**
+   * @brief bool to let the thread run indefini
+   */
+  bool run = true;
+  
+//////////////////////////////////////////////////////////////////////////////////////////////
+//   IMGUI FUNCTIONS
+//   FOR INTERFACE (MAYBE CHANGE THE CPP OF THEM)
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+  /**
+   * @brief temporal function to modify a point light (can use for future)
+   */
   void 
   modifyPointlight();
-  bool run = true;
+
+  /**
+   * @brief function to modify the ambient light
+   */
+  void
+  imguiAmbientLight();
+
+  /**
+   * @brief function to see objects in the scene (they don't have a name, may be will give them one)
+   */
+  void
+  imguiShowObjects();
+
+  /**
+   * @brief function to show propierties of selected object
+   */
+  void
+  imguiShowObjectPropierties();
+
+  /**
+   * @brief function to show propierties of a sphere
+   */
+  void
+  imguiShowSpherePropierties();
+
+  /**
+   * @brief function to show propierties of a Box
+   */
+  void
+  imguiShowBoxPropierties();
+
+  /**
+   * @brief function to show propierties of a Plane
+   */
+  void
+  imguiShowPlanePropierties();
+
+  /**
+   * @brief function to show propierties of a Cylinder
+   */
+  void
+  imguiShowCylindrePropierties();
+
+  /**
+   * @brief function to show propierties of materials
+   */
+  void
+  imguiShowMaterialPropierties();
+
+  /**
+   * @brief function to show propierties of a matte material
+   */
+  void
+  imguiShowMatteMaterialPropierties();
+
+  /**
+   * @brief function to show propierties of a matte material
+   */
+  void
+  imguiShowPhongMaterialPropierties();
+
+  /**
+   * @brief function to show propierties of a matte material
+   */
+  void
+  imguiShowPlasticMaterialPropierties();
+
+  /**
+   * @brief function to show lights in scene
+   */
+  void
+  imguiShowLights();
+
+  /**
+   * @brief function to show selected light propierties
+   */
+  void
+  imguiShowLightPropierties();
+
+  /**
+   * @brief function to show light point propierties
+   */
+  void
+  imguiShowPointLightPropierties();
+
+  /**
+   * @brief vector with all objects in scene
+   */
+  SPtr<jlGeometricObject> m_selectedObject;
+
+  /**
+   * @brief vector with all objects in scene
+   */
+  SPtr<jlLight> m_selectedLight;
+
 };

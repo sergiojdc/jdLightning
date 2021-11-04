@@ -1,9 +1,9 @@
 /*****************************************************************************/
 /**
-	* @file    jlMMatte.h
+	* @file    jlMPhong.h
 	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
-	* @date    2/11/2021
-	* @brief   A class for a Matte material
+	* @date    3/11/2021
+	* @brief   A class for a phong material 
 	*
 	*
 	* @bug	    No known bugs.
@@ -13,32 +13,34 @@
 #include "Prerequisites.h"
 #include "jlMaterial.h"
 #include "jlBRDFLambertian.h"
+#include "jlBRDFGlossySpecular.h"
 
-class jlMMatte : public jlMaterial {
+class jlMPhong : public jlMaterial {
  public:
 		/**
 			* @brief default constructor
 			*/
-		jlMMatte() {
+		jlMPhong() {
 				m_ambientBRDF.reset(new jlBRDFLambertian);
 				m_diffuseBRDF.reset(new jlBRDFLambertian);
-				m_type = MATERIALTYPE::MATTE;
+				m_specularBRDF.reset(new jlBRDFGlossySpecular);
+				m_type = MATERIALTYPE::PHONG;
 		};
-		
+
 		/**
 			* @brief default destructor
 			*/
-		~jlMMatte() {};
+		~jlMPhong() {};
 
 		/**
 			* @brief calculate shade
 			* @param sr is the sahde rec with the data to use
 			* @reutrn the result color
 			*/
-  virtual jlColor
-  shade(jlShadeRec& sr) override;
+		virtual jlColor
+		shade(jlShadeRec& sr) override;
 
-		/**
+  /**
 			* @brief set ambient reflection coefficient
 			* @param k is value of coefficient
 			*/
@@ -57,6 +59,15 @@ class jlMMatte : public jlMaterial {
   }
 
 		/**
+			* @brief set specular reflection coefficient
+			* @param k is value of coefficient
+			*/
+  void
+  setKs(const float& k) {
+				m_specularBRDF->setSpecularReflectionCoefficient(k);
+  }
+
+		/**
 			* @brief set the material's color
 			* @param c is color to set
 			*/
@@ -64,7 +75,13 @@ class jlMMatte : public jlMaterial {
   setCd(const jlColor& c) {
     m_ambientBRDF->setDiffuseColor(c);
 				m_diffuseBRDF->setDiffuseColor(c);
+				m_specularBRDF->setColor(c);
   }
+
+		void
+		setSpecularExponent(int32 exp) {
+				m_specularBRDF->setSpecularReflectionExponent(exp);
+		}
 
 		/**
 			* @brief BRDF for ambient
@@ -72,7 +89,12 @@ class jlMMatte : public jlMaterial {
   SPtr<jlBRDFLambertian> m_ambientBRDF;
 
 		/**
-			* @brief BRDF for difuse
+			* @brief BRDF for diffuse
 			*/
 		SPtr<jlBRDFLambertian> m_diffuseBRDF;
+
+		/**
+			* @brief BRDF for specular
+			*/
+		SPtr<jlBRDFGlossySpecular> m_specularBRDF;
 };

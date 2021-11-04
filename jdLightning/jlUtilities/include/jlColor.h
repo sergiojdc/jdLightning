@@ -369,6 +369,14 @@ namespace jlUtilitiesSDK {
     jlColor
     powc(const float& value) const;
 
+    /**
+     * @brief function to power the color
+     * @brief value is the power value
+     * @return the color powered
+     */
+    jlColor
+    powc(uint32 value) const;
+
    private:
     /**
      * @brief function to make the values between 0 to max value
@@ -697,6 +705,15 @@ namespace jlUtilitiesSDK {
 
   FORCEINLINE jlColor
   jlColor::powc(const float& value) const {
+    jlColor c = *this;
+    c.r = Math::pow(c.r, (uint32)value);
+    c.g = Math::pow(c.g, (uint32)value);
+    c.b = Math::pow(c.b, (uint32)value);
+    return c;
+  }
+
+  FORCEINLINE jlColor
+  jlColor::powc(uint32 value) const {
     jlColor c = *this;
     c.r = Math::pow(c.r, value);
     c.g = Math::pow(c.g, value);

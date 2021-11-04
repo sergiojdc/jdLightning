@@ -44,24 +44,32 @@ jlCPinhole::renderSceneSoftware(jlWorld* world) {
   vp.m_pixelSize /= m_zoom;
   ray.m_origin = m_eye;
   auto black = jlColor::Black();
+  while (world->run) {
+    if (!world->run)
+      break;
+      for (uint32 cwidth = 0; cwidth < vp.m_wRes; ++cwidth) { // up
+        if (!world->run)
+          break;
+        for (uint32 cheight = 0; cheight < vp.m_hRes; ++cheight) { // across 
+          if (!world->run)
+            break;
+          L = black;
+          //Sampler
+          for (uint32 s = 0; s < vp.m_numSamples; ++s) {
+            sp = vp.m_pSampler->sampleUnitSquare();
+            pp.x = float(vp.m_pixelSize * (cwidth - 0.5 * vp.m_wRes + sp.x));
+            pp.y = float(vp.m_pixelSize * (cheight - 0.5 * vp.m_hRes + sp.y));
+            ray.m_direction = rayDirection(pp);
+            //L += world->m_pTracer->traceRay(ray);
+            L += world->m_pTracer->traceRay(ray, depth);
+          }
 
-  for (uint32 cwidth = 0; cwidth < vp.m_wRes; ++cwidth) { // up
-    for (uint32 cheight = 0; cheight < vp.m_hRes; ++cheight) { // across 
-      L = black;
-      //Sampler
-      for (uint32 s = 0; s < vp.m_numSamples; ++s) {
-        sp = vp.m_pSampler->sampleUnitSquare();
-        pp.x = float(vp.m_pixelSize * (cwidth - 0.5 * vp.m_wRes + sp.x));
-        pp.y = float(vp.m_pixelSize * (cheight - 0.5 * vp.m_hRes + sp.y));
-        ray.m_direction = rayDirection(pp);
-        //L += world->m_pTracer->traceRay(ray);
-        L += world->m_pTracer->traceRay(ray, depth);
+          L /= (float)vp.m_numSamples;
+          L *= m_exposureTime;
+          world->displayPixel(cwidth, cheight, L);
+        }
       }
-
-      L /= (float)vp.m_numSamples;
-      L *= m_exposureTime;
-      world->displayPixel(cwidth, cheight, L);
-    }
+    world->m_threadsFinishedFirst[0] = true;
   }
 
   world->m_threadsFinished[0] = true;
@@ -109,6 +117,6 @@ jlCPinhole::renderThread(jlWorld* world, int threadIdx) {
 
     world->m_threadsFinishedFirst[threadIdx] = true;
   }
-    world->m_threadsFinished[threadIdx] = true;
+  world->m_threadsFinished[threadIdx] = true;
   
 }

@@ -18,6 +18,7 @@
 #include "jlPointLight.h"
 //Materials
 #include "jlMMatte.h"
+#include "jlMPhong.h"
 
 void 
 jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
@@ -102,14 +103,28 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   m_sphere = jlSphere({0,0,0}, 40.0f);
 
   SPtr<jlMMatte> matte(new jlMMatte);
-  matte->setKa(0);
-  matte->setKd(1);
+  matte->setKa(0.25f);
+  matte->setKd(0.65f);
   matte->setCd({ 1, 1, 0 });
   SPtr<jlSphere> newSphere(new jlSphere);
   newSphere->m_position = { 0, -25, 0 };
   newSphere->m_radius = 80.0f;
   newSphere->m_color = { 1,0,0 };
   newSphere->m_pMaterial = matte;
+  addObject(newSphere);
+
+  SPtr<jlMPhong> phong(new jlMPhong);
+  phong->setCd({ 0, 1, 0 });
+  phong->setKa(0.25f);
+  phong->setKd(0.5f);
+  phong->setKs(0.5f);
+  phong->setSpecularExponent(1);
+
+  newSphere.reset(new jlSphere);
+  newSphere->m_position = { 0, -25, 0 };
+  newSphere->m_radius = 80.0f;
+  newSphere->m_color = { 1,0,0 };
+  newSphere->m_pMaterial = phong;
   addObject(newSphere);
 
   //newSphere.reset(new jlSphere({ 0,30,0 }, 60));
@@ -188,7 +203,12 @@ void jlWorld::renderScene() {
     //ImGui::Button("Look at this pretty button");
     //ImGui::End();
 
-    modifyPointlight();
+    //modifyPointlight();
+    imguiAmbientLight();
+    imguiShowObjects(); 
+    imguiShowObjectPropierties();
+    imguiShowLights();
+    imguiShowLightPropierties();
 
     m_texture.update(m_image);
     m_sprite.setTexture(m_texture);
@@ -221,6 +241,10 @@ jlWorld::openWindow(const uint32 width, const uint32 height) {
   m_window = new sf::RenderWindow(sf::VideoMode(width, height), "My window");
   // Create a image filled with black color
   ImGui::SFML::Init(*m_window);
+  ImGuiIO& io = ImGui::GetIO();
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
   sf::Color backGround((uint8)m_backgroundColor.x, 
                        (uint8)m_backgroundColor.y, 
                        (uint8)m_backgroundColor.z);
@@ -577,7 +601,7 @@ jlWorld::displayPixel(const int x, const int y, const jlColor& pixel_color) {
   
   if (m_vp.m_gamma != 1.0)
     color = color.powc(m_vp.m_invGamma);
-
+  color.make255();
   sf::Color sfColor((uint8)color.x, (uint8)color.y, (uint8)color.z);
   m_image.setPixel(x, y, sfColor);
 }
@@ -645,17 +669,3 @@ jlWorld::clampToColor(const jlColor& color) const {
   return (c);
 }
 
-void 
-jlWorld::modifyPointlight() {
-  ImGui::Begin("pointLight");
-  auto point = std::static_pointer_cast<jlPointLight>(m_pPointLight);
-  auto pos = point->getPosition();
-  ImGui::DragFloat3("Position", &pos.x);
-  point->setPosition(pos);
-
-  auto col = point->getColor();
-  ImGui::ColorEdit3("Position", &col.x);
-  point->setColor(col);
-
-  ImGui::End();
-}

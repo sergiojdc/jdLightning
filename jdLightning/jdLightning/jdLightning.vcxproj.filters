@@ -84,7 +84,28 @@
     <ClCompile Include="src\jlMMatte.cpp">
       <Filter>Archivos de origen\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui-SFML.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlBRDFGlossySpecular.cpp">
+      <Filter>Archivos de origen\BRDFs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlMPhong.cpp">
+      <Filter>Archivos de origen\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlMPlastic.cpp">
+      <Filter>Archivos de origen\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlGOBox.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlWorldImGui.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="..\dependencies\imgui\include\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\include\imgui_demo.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp">
@@ -94,9 +115,6 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\imgui\include\imgui-SFML.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -169,6 +187,18 @@
     </ClInclude>
     <ClInclude Include="include\jlMMatte.h">
       <Filter>Archivos de encabezado\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlBRDFGlossySpecular.h">
+      <Filter>Archivos de encabezado\BRDFs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlMPhong.h">
+      <Filter>Archivos de encabezado\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlMPlastic.h">
+      <Filter>Archivos de encabezado\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGOBox.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,13 @@ class jlBRDFLambertian : public jlBRDF {
 			* @brief default constructor
 			*/
   jlBRDFLambertian() {};
+
+  /**
+			* @brief default constructor with params
+			* @param c is the color of brdf
+			* @param kd is diffuse Reflection Coefficient
+			*/
+  jlBRDFLambertian(const jlColor& c, const float& kd) : m_cd(c),  m_kd(kd) {};
   
 		/**
 			* @brief default destructor
@@ -98,6 +105,7 @@ class jlBRDFLambertian : public jlBRDF {
   }
 
  private:
+  friend class jlWorld;
   /**
    * @brief the diffuse reflection coefficient
    */

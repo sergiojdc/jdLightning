@@ -5,6 +5,7 @@ const double jlPlane::kEpsilon = 0.00001;
 jlPlane::jlPlane(const jlVector3 point, const jlNormal& normal) {
   m_point = point;
   m_normal = normal;
+  m_type = GEOMETRITYPE::PLANE;
 }
 
 bool 

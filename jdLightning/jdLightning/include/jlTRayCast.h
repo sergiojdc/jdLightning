@@ -42,6 +42,7 @@ class jlTRayCast : public jlTracer {
 			*/
 		virtual jlColor
 		traceRay(const jlRay& ray, uint32 depth) const override {
+				UNREFERENCED_PARAMETER(depth);
 				jlShadeRec sr(m_world->hitObjects(ray));
 				if (sr.m_hitAnObject)	{
 						sr.m_ray = ray;

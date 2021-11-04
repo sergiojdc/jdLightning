@@ -5,6 +5,7 @@ const double jlSphere::kEpsilon = 0.00001;
 jlSphere::jlSphere(const jlVector3 pos, const float& ratio) {
   m_position = pos;
   m_radius = ratio;
+  m_type = GEOMETRITYPE::SPHERE;
 }
 
 bool 

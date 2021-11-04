@@ -191,32 +191,42 @@
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\include\imgui-SFML.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui.cpp" />
+    <ClCompile Include="..\dependencies\imgui\include\imgui_demo.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_tables.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp" />
+    <ClCompile Include="src\jlBRDFGlossySpecular.cpp" />
     <ClCompile Include="src\jlBRDFLambertian.cpp" />
     <ClCompile Include="src\jlCPinhole.cpp" />
+    <ClCompile Include="src\jlGOBox.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
     <ClCompile Include="src\jlGOSphere.cpp" />
     <ClCompile Include="src\jlMMatte.cpp" />
+    <ClCompile Include="src\jlMPhong.cpp" />
+    <ClCompile Include="src\jlMPlastic.cpp" />
     <ClCompile Include="src\jlPointLight.cpp" />
     <ClCompile Include="src\jlSampler.cpp" />
     <ClCompile Include="src\jlWorld.cpp" />
+    <ClCompile Include="src\jlWorldImGui.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jlBRDF.h" />
+    <ClInclude Include="include\jlBRDFGlossySpecular.h" />
     <ClInclude Include="include\jlBRDFLambertian.h" />
     <ClInclude Include="include\jlCamera.h" />
     <ClInclude Include="include\jlCPinhole.h" />
     <ClInclude Include="include\jlGeometriObject.h" />
+    <ClInclude Include="include\jlGOBox.h" />
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
     <ClInclude Include="include\jlLAmbient.h" />
     <ClInclude Include="include\jlLight.h" />
     <ClInclude Include="include\jlMaterial.h" />
     <ClInclude Include="include\jlMMatte.h" />
+    <ClInclude Include="include\jlMPhong.h" />
+    <ClInclude Include="include\jlMPlastic.h" />
     <ClInclude Include="include\jlPointLight.h" />
     <ClInclude Include="include\jlSampler.h" />
     <ClInclude Include="include\jlShadeRec.h" />

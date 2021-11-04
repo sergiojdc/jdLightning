@@ -14,6 +14,15 @@
 #include "jlVector3.h"
 #include "jlColor.h"
 
+namespace LIGHTTYPES {
+		enum E {
+				AMBIENT = 0,
+				POINT,
+				NUMLIGHTS,
+				UNKNOW
+		};
+};
+
 class jlShadeRec;
 
 class jlLight {
@@ -41,6 +50,8 @@ class jlLight {
 			*/
   virtual jlColor
   L(jlShadeRec& sr) = 0;
+
+		LIGHTTYPES::E m_type = LIGHTTYPES::UNKNOW;
 
  protected:
 

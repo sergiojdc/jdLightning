@@ -19,7 +19,9 @@ class jlPlane : public jlGeometricObject
   /**
    * @brief defaul constructor
    */
-   jlPlane() = default;
+   jlPlane() {
+     m_type = GEOMETRITYPE::PLANE;
+   };
 
   /**
    * @brief constructor with point and normal

@@ -18,12 +18,16 @@ class jlLAmbient : public jlLight {
 		/**
 			* @brief default constructor
 			*/
-		jlLAmbient() = default;
+		jlLAmbient() {
+				m_type = LIGHTTYPES::AMBIENT;
+		};
 
 		/**
 			* @brief constructor with params
 			*/
-		jlLAmbient(const float& ls, const jlColor& color) : m_ls(ls), m_color(color) {};
+		jlLAmbient(const float& ls, const jlColor& color) : m_ls(ls), m_color(color) {
+				m_type = LIGHTTYPES::AMBIENT;
+		};
 		
 		/**
 			* @brief default destructor

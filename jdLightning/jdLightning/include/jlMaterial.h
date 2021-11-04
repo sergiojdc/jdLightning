@@ -13,6 +13,16 @@
 #include "Prerequisites.h"
 #include <jlColor.h>
 
+namespace MATERIALTYPE {
+		enum E {
+				MATTE = 0,
+				PHONG,
+				PLASTIC,
+				NUMOFMATERIALS,
+				UKNOW
+		};
+};
+
 class jlShadeRec;
 
 class jlMaterial {
@@ -34,6 +44,7 @@ class jlMaterial {
 			*/
   virtual jlColor
   shade(jlShadeRec& sr) {
+				UNREFERENCED_PARAMETER(sr);
     return { 0, 0, 0};
   };
 
@@ -44,6 +55,7 @@ class jlMaterial {
 			*/
   virtual jlColor
   areaLightShade(jlShadeRec& sr) {
+				UNREFERENCED_PARAMETER(sr);
     return { 0, 0, 0 };
   };
 
@@ -54,6 +66,9 @@ class jlMaterial {
 			*/
   virtual jlColor
   pathShade(jlShadeRec& sr) {
+				UNREFERENCED_PARAMETER(sr);
     return { 0, 0, 0 };
   };
+
+		MATERIALTYPE::E m_type = MATERIALTYPE::UKNOW;
 };

@@ -18,7 +18,9 @@ class jlPointLight : public jlLight {
 		/**
 			* @brief default constructor
 			*/
-		jlPointLight() = default;
+		jlPointLight() {
+				m_type = LIGHTTYPES::POINT;
+		};
 
 		/**
 			* @brief default destructor

@@ -18,7 +18,9 @@ class jlSphere : public jlGeometricObject {
   /**
    * @brief defaul constructor
    */
-  jlSphere() = default;
+  jlSphere() {
+    m_type = GEOMETRITYPE::SPHERE;
+  };
 
   /**
    * @brief constructor with point and normal

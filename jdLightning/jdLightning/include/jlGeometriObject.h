@@ -15,6 +15,17 @@
 #include <jlColor.h>
 #include "jlShadeRec.h"
 
+namespace GEOMETRITYPE {
+		enum E {
+				PLANE = 0,
+				SPHERE,
+				BOX,
+				CYLINDER,
+			 NUMOFTYPES,
+				UNKNOW
+		};
+}
+
 class jlGeometricObject {
  public:
 		/**
@@ -48,5 +59,7 @@ class jlGeometricObject {
 	 	* @brief object Material
 	 	*/
 		SPtr<jlMaterial> m_pMaterial;
+
 		//Material* m_pMaterial;
+		GEOMETRITYPE::E m_type = GEOMETRITYPE::UNKNOW;
 };
