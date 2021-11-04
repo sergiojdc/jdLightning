@@ -14,6 +14,7 @@
 
 #include "jlPlatformDefines.h"
 #include "jlVector2.h"
+#include "jlString.h"
 
 namespace jlUtilitiesSDK {
 
@@ -323,6 +324,13 @@ namespace jlUtilitiesSDK {
     FORCEINLINE jlVector3
     cross(const jlVector3& vec) const;
 
+    /**
+     * @brief get the vector in a string
+     * @return a string with the vector data
+     */
+    FORCEINLINE String
+    getString() const;
+
 /*****************************************************************************/
 /**
  * Members
@@ -522,5 +530,17 @@ namespace jlUtilitiesSDK {
   FORCEINLINE jlVector3
   jlVector3::cross(const jlVector3& vec) const {
     return jlVector3(y * vec.z - z * vec.y, -(x * vec.z - z * vec.x), x * vec.y - y * vec.x);
+  }
+
+  FORCEINLINE String
+  jlVector3::getString() const {
+    String str = "(x:" + 
+                 std::to_string(x) + 
+                 ", y:" + 
+                 std::to_string(y) + 
+                 ", z:" + 
+                 std::to_string(z) + 
+                 ")";
+    return str;
   }
 }

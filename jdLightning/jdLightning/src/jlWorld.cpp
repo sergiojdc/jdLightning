@@ -82,6 +82,8 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   std::cout << "mapping unit disk"  << std::endl;
   sampler->mapSamplerToUnitDisk();
   std::cout << "unit disk mapped " << time.getSeconds() << " seconds" << std::endl;
+
+  m_vp.m_bShowOutOfGamut = true;
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Set background color
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +109,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   matte->setKd(0.65f);
   matte->setCd({ 1, 1, 0 });
   SPtr<jlSphere> newSphere(new jlSphere);
-  newSphere->m_position = { 0, -25, 0 };
+  newSphere->m_position = { 90, -25, 0 };
   newSphere->m_radius = 80.0f;
   newSphere->m_color = { 1,0,0 };
   newSphere->m_pMaterial = matte;
@@ -121,7 +123,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   phong->setSpecularExponent(1);
 
   newSphere.reset(new jlSphere);
-  newSphere->m_position = { 0, -25, 0 };
+  newSphere->m_position = { -90, -25, 0 };
   newSphere->m_radius = 80.0f;
   newSphere->m_color = { 1,0,0 };
   newSphere->m_pMaterial = phong;
@@ -171,6 +173,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
 }
 
 void jlWorld::renderScene() {
+  m_window->setFramerateLimit(30);
   while (m_window->isOpen())
   {
     if (!m_allThreadFinished) {
@@ -196,6 +199,38 @@ void jlWorld::renderScene() {
         m_window->close();
         run = false;
       }
+      if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::W) {
+          m_pCamera->moveForward();
+        }
+        if (event.key.code == sf::Keyboard::S) {
+          m_pCamera->moveBackward();
+        }
+        if (event.key.code == sf::Keyboard::A) {
+          m_pCamera->moveLeft();
+        }
+        if (event.key.code == sf::Keyboard::D) {
+          m_pCamera->moveRight();
+        }
+        if (event.key.code == sf::Keyboard::R) {
+          m_pCamera->moveUp();
+        }
+        if (event.key.code == sf::Keyboard::F) {
+          m_pCamera->moveDown();
+        }
+        if (event.key.code == sf::Keyboard::Up) {
+          m_pCamera->rotateUp();
+        }
+        if (event.key.code == sf::Keyboard::Down) {
+          m_pCamera->rotateDown();
+        }
+        if (event.key.code == sf::Keyboard::Left) {
+          m_pCamera->rotateLeft();
+        }
+        if (event.key.code == sf::Keyboard::Right) {
+          m_pCamera->rotateRight();
+        }
+      }
     }
     ImGui::SFML::Update(*m_window, deltaClock.restart());
     
@@ -206,9 +241,10 @@ void jlWorld::renderScene() {
     //modifyPointlight();
     imguiAmbientLight();
     imguiShowObjects(); 
-    imguiShowObjectPropierties();
+    imguiShowObjectProperties();
     imguiShowLights();
-    imguiShowLightPropierties();
+    imguiShowLightProperties();
+    imguiShowCameraProperties();
 
     m_texture.update(m_image);
     m_sprite.setTexture(m_texture);
@@ -664,7 +700,7 @@ jlColor
 jlWorld::clampToColor(const jlColor& color) const {
   jlColor c(color);
   if (color.r > 1.0 || color.g > 1.0 || color.b > 1.0) {
-    c.r = 1.0; c.g = 0.0; c.b = 0.0;
+    c.r = 1.0f; c.g = 1.0f; c.b = 1.0f;
   }
   return (c);
 }

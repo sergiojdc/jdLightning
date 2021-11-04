@@ -307,58 +307,58 @@ class jlWorld {
   imguiShowObjects();
 
   /**
-   * @brief function to show propierties of selected object
+   * @brief function to show Properties of selected object
    */
   void
-  imguiShowObjectPropierties();
+  imguiShowObjectProperties();
 
   /**
-   * @brief function to show propierties of a sphere
+   * @brief function to show Properties of a sphere
    */
   void
-  imguiShowSpherePropierties();
+  imguiShowSphereProperties();
 
   /**
-   * @brief function to show propierties of a Box
+   * @brief function to show Properties of a Box
    */
   void
-  imguiShowBoxPropierties();
+  imguiShowBoxProperties();
 
   /**
-   * @brief function to show propierties of a Plane
+   * @brief function to show Properties of a Plane
    */
   void
-  imguiShowPlanePropierties();
+  imguiShowPlaneProperties();
 
   /**
-   * @brief function to show propierties of a Cylinder
+   * @brief function to show Properties of a Cylinder
    */
   void
-  imguiShowCylindrePropierties();
+  imguiShowCylindreProperties();
 
   /**
-   * @brief function to show propierties of materials
+   * @brief function to show Properties of materials
    */
   void
-  imguiShowMaterialPropierties();
+  imguiShowMaterialProperties();
 
   /**
-   * @brief function to show propierties of a matte material
+   * @brief function to show Properties of a matte material
    */
   void
-  imguiShowMatteMaterialPropierties();
+  imguiShowMatteMaterialProperties();
 
   /**
-   * @brief function to show propierties of a matte material
+   * @brief function to show Properties of a matte material
    */
   void
-  imguiShowPhongMaterialPropierties();
+  imguiShowPhongMaterialProperties();
 
   /**
-   * @brief function to show propierties of a matte material
+   * @brief function to show Properties of a matte material
    */
   void
-  imguiShowPlasticMaterialPropierties();
+  imguiShowPlasticMaterialProperties();
 
   /**
    * @brief function to show lights in scene
@@ -367,16 +367,22 @@ class jlWorld {
   imguiShowLights();
 
   /**
-   * @brief function to show selected light propierties
+   * @brief function to show selected light Properties
    */
   void
-  imguiShowLightPropierties();
+  imguiShowLightProperties();
 
   /**
-   * @brief function to show light point propierties
+   * @brief function to show light point Properties
    */
   void
-  imguiShowPointLightPropierties();
+  imguiShowPointLightProperties();
+
+  /**
+   * @brief function to show light point Properties
+   */
+  void
+  imguiShowCameraProperties();
 
   /**
    * @brief vector with all objects in scene

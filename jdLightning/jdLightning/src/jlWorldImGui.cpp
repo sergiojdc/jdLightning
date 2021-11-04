@@ -81,65 +81,65 @@ jlWorld::imguiShowObjects() {
 }
 
 void
-jlWorld::imguiShowObjectPropierties() {
+jlWorld::imguiShowObjectProperties() {
   if (!m_selectedObject) {
     return;
   }
-  ImGui::Begin("object propierties");
+  ImGui::Begin("object Properties");
   switch (m_selectedObject->m_type) {
    case GEOMETRITYPE::PLANE:
-    imguiShowPlanePropierties();
+    imguiShowPlaneProperties();
     break;
    case GEOMETRITYPE::SPHERE:
-    imguiShowSpherePropierties();
+    imguiShowSphereProperties();
     break;
    case GEOMETRITYPE::BOX:
-    imguiShowBoxPropierties();
+    imguiShowBoxProperties();
     break;
    case GEOMETRITYPE::CYLINDER:
-    imguiShowCylindrePropierties();
+    imguiShowCylindreProperties();
     break;
    default:
     break;
   }
 
-  imguiShowMaterialPropierties();
+  imguiShowMaterialProperties();
   ImGui::End();
 }
 
 void
-jlWorld::imguiShowSpherePropierties() {
+jlWorld::imguiShowSphereProperties() {
   auto sphere = std::static_pointer_cast<jlSphere>(m_selectedObject);
   ImGui::DragFloat3("Position", &sphere->m_position.x);
   ImGui::DragFloat("Ratio", &sphere->m_radius, 0.5f, 0.0f);
 }
 
 void
-jlWorld::imguiShowBoxPropierties() {
+jlWorld::imguiShowBoxProperties() {
 
 }
 
 void
-jlWorld::imguiShowPlanePropierties() {
+jlWorld::imguiShowPlaneProperties() {
 
 }
 
 void
-jlWorld::imguiShowCylindrePropierties() {
+jlWorld::imguiShowCylindreProperties() {
 
 }
 
 void
-jlWorld::imguiShowMaterialPropierties() {
+jlWorld::imguiShowMaterialProperties() {
   switch (m_selectedObject->m_pMaterial->m_type) {
    case MATERIALTYPE::MATTE:
-    imguiShowMatteMaterialPropierties();
+    imguiShowMatteMaterialProperties();
     break;
    case MATERIALTYPE::PHONG:
-    imguiShowPhongMaterialPropierties();
+    imguiShowPhongMaterialProperties();
     break;
    case MATERIALTYPE::PLASTIC:
-    imguiShowPlasticMaterialPropierties();
+    imguiShowPlasticMaterialProperties();
     break;
    default:
     break;
@@ -147,21 +147,25 @@ jlWorld::imguiShowMaterialPropierties() {
 }
 
 void
-jlWorld::imguiShowMatteMaterialPropierties() {
+jlWorld::imguiShowMatteMaterialProperties() {
   auto matte = std::static_pointer_cast<jlMMatte>(m_selectedObject->m_pMaterial);
   auto color = matte->m_diffuseBRDF->m_cd;
   ImGui::ColorEdit3("Color", &color.r);
   ImGui::DragFloat("Ambient reflection coefficient",
                    &matte->m_ambientBRDF->m_kd,
-                   0.05f);
+                   0.05f,
+                   0.00f,
+                   5.00f);
   ImGui::DragFloat("Diffuse reflection coefficient",
                    &matte->m_diffuseBRDF->m_kd,
-                   0.05f);
+                   0.05f,
+                   0.00f,
+                   5.00f);
   matte->setCd(color);
 }
 
 void
-jlWorld::imguiShowPhongMaterialPropierties() {
+jlWorld::imguiShowPhongMaterialProperties() {
   auto phong = std::static_pointer_cast<jlMPhong>(m_selectedObject->m_pMaterial);
   auto color = phong->m_diffuseBRDF->m_cd;
   ImGui::ColorEdit3("Color", &color.r);
@@ -169,17 +173,17 @@ jlWorld::imguiShowPhongMaterialPropierties() {
                    &phong->m_ambientBRDF->m_kd,
                    0.05f,
                    0.00f,
-                   1.00f);
+                   5.00f);
   ImGui::DragFloat("Diffuse reflection coefficient",
                    &phong->m_diffuseBRDF->m_kd,
                    0.05f,
                    0.00f,
-                   1.00f);
+                   5.00f);
   ImGui::DragFloat("Specular reflection coefficient",
                    &phong->m_specularBRDF->m_ks,
                    0.05f,
                    0.00f,
-                   1.00f);
+                   5.00f);
   ImGui::DragInt("Specular reflection exponent", 
                  &phong->m_specularBRDF->m_exp, 
                  1.0f, 
@@ -189,7 +193,7 @@ jlWorld::imguiShowPhongMaterialPropierties() {
 }
 
 void
-jlWorld::imguiShowPlasticMaterialPropierties() {
+jlWorld::imguiShowPlasticMaterialProperties() {
 
 }
 
@@ -218,16 +222,16 @@ jlWorld::imguiShowLights() {
 }
 
 void
-jlWorld::imguiShowLightPropierties() {
+jlWorld::imguiShowLightProperties() {
   if (!m_selectedLight) {
     return;
   }
-  ImGui::Begin("Light propierties");
+  ImGui::Begin("Light Properties");
   switch (m_selectedLight->m_type) {
    case LIGHTTYPES::AMBIENT:
     break;
    case LIGHTTYPES::POINT:
-    imguiShowPointLightPropierties();
+    imguiShowPointLightProperties();
     break;
    default:
     break;
@@ -236,13 +240,33 @@ jlWorld::imguiShowLightPropierties() {
 }
 
 void
-jlWorld::imguiShowPointLightPropierties() {
+jlWorld::imguiShowPointLightProperties() {
   auto point = std::static_pointer_cast<jlPointLight>(m_selectedLight);
   auto pos = point->getPosition();
-  ImGui::DragFloat3("Position", &pos.x);
-  point->setPosition(pos);
-
   auto col = point->getColor();
+  auto ls = point->getRadianceScalingFactor();
+  ImGui::DragFloat3("Position", &pos.x);
+  ImGui::DragFloat("Radiance Scaling Factor", &ls, 0.05f, -1.0f, 5.0f);
   ImGui::ColorEdit3("Position", &col.x);
+
+  point->setPosition(pos);
+  point->setRadianceScalingFactor(ls);
   point->setColor(col);
+}
+
+void
+jlWorld::imguiShowCameraProperties() {
+  ImGui::Begin("Camera Properties");
+  String campos = "Eye " + m_pCamera->m_eye.getString();
+  String camf = "Front " + m_pCamera->m_w.getString();
+  String camr = "Right " + m_pCamera->m_u.getString();
+  String camu = "Up " + m_pCamera->m_v.getString();
+  ImGui::Text(campos.c_str());
+  ImGui::Text(camf.c_str());
+  ImGui::Text(camr.c_str());
+  ImGui::Text(camu.c_str());
+  ImGui::DragFloat("Speed", &m_pCamera->m_moveSpeed, 0.5f, 0.1f, 200.0f);
+  ImGui::DragFloat("Rotation Speed", &m_pCamera->m_rotationPercen, 0.05f, 0.01f, 1.0f);
+  ImGui::DragFloat("ExposureTime", &m_pCamera->m_exposureTime, 0.05f, 0.05f, 200.0f);
+  ImGui::End();
 }

@@ -6,7 +6,10 @@
 
 jlVector3 
 jlCPinhole::rayDirection(const jlVector3& p) {
-  jlVector3 dir = p.x * m_u + p.y * m_v - m_viewDistance * m_w;
+  //for some reazon if calulate uvw with eye - lookat this have to use "- m_viewDistance * m_w" 
+  // eye - lookat is the negative of front,
+  // if use the front (lookat - eye) this have to be "+ m_viewDistance * m_w"
+  jlVector3 dir = p.x * m_u + p.y * m_v + m_viewDistance * m_w;
   dir.normalize();
   return dir;
 }
@@ -84,7 +87,7 @@ jlCPinhole::renderThread(jlWorld* world, int threadIdx) {
   jlVector2 sp; // sample point in [0, 1] X [0, 1]
   jlVector2 pp; // sample point on a pixel
   vp.m_pixelSize /= m_zoom;
-  ray.m_origin = m_eye;
+
 
   uint32 threadWidth = (uint32)world->m_IndexImageWidth[threadIdx].size();
   auto array = world->m_IndexImageWidth[threadIdx];
@@ -98,6 +101,7 @@ jlCPinhole::renderThread(jlWorld* world, int threadIdx) {
       for (uint32 height = 0; height < vp.m_hRes; ++height) { // across 
         if (!world->run)
           break;
+        ray.m_origin = m_eye;
         L = jlColor::Black();
         uint32 currentX = array[width];
         
