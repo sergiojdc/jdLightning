@@ -105,7 +105,7 @@ class jlCamera {
     auto dir = m_v - m_w;
     m_w += dir * m_rotationPercen;
     m_w.normalize();
-    m_u = m_up.cross(m_w);//right
+    m_u = m_v.cross(m_w);//right
     m_u.y = 0;
     m_u.normalize();
     m_v = m_w.cross(m_u); //real up
@@ -117,7 +117,7 @@ class jlCamera {
     auto dir = m_v - m_w;
     m_w -= dir * m_rotationPercen;
     m_w.normalize();
-    m_u = m_up.cross(m_w);//right
+    m_u = m_v.cross(m_w);//right
     m_u.y = 0;
     m_u.normalize();
     m_v = m_w.cross(m_u); //real up

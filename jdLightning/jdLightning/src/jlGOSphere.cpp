@@ -39,3 +39,26 @@ jlSphere::hit(const jlRay& ray, double& tmin, jlShadeRec& sr) {
   }
   return false;
 }
+
+bool 
+jlSphere::shadowHit(const jlRay& ray, float& tmin) {
+  float  t = 0;
+  jlVector3 temp = ray.m_origin - m_position;
+  float a = ray.m_direction.dot(ray.m_direction);
+  float b = 2.0 * temp.dot(ray.m_direction);
+  float c = temp.dot(temp) - (m_radius * m_radius);
+  float disc = b * b - 4.0 * a * c;
+
+  if (disc < 0.0)
+    return false;
+  else {
+    float e = sqrt(disc);
+    float denom = 2.0 * a;
+    t = (-b - e) / denom; // smaller root
+    if (t > kEpsilon) {
+      tmin = t;
+      return true;
+    }
+  }
+  return false;
+}

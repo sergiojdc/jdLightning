@@ -340,25 +340,25 @@ class jlWorld {
    * @brief function to show Properties of materials
    */
   void
-  imguiShowMaterialProperties();
+  imguiShowMaterialProperties(SPtr<jlMaterial> material);
 
   /**
    * @brief function to show Properties of a matte material
    */
   void
-  imguiShowMatteMaterialProperties();
+  imguiShowMatteMaterialProperties(SPtr<jlMaterial> material);
 
   /**
    * @brief function to show Properties of a matte material
    */
   void
-  imguiShowPhongMaterialProperties();
+  imguiShowPhongMaterialProperties(SPtr<jlMaterial> material);
 
   /**
    * @brief function to show Properties of a matte material
    */
   void
-  imguiShowPlasticMaterialProperties();
+  imguiShowPlasticMaterialProperties(SPtr<jlMaterial> material);
 
   /**
    * @brief function to show lights in scene

@@ -45,6 +45,7 @@ class jlPlane : public jlGeometricObject
   ~jlPlane() {};
 
 private:
+  friend class jlWorld;
   /**
    * @brief point through which
    */

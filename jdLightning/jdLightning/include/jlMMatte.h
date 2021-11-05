@@ -29,14 +29,30 @@ class jlMMatte : public jlMaterial {
 			* @brief default destructor
 			*/
 		~jlMMatte() {};
+		//This is the first version of shade, was changed to normal shade
+		///**
+		//	* @brief calculate shade
+		//	* @param sr is the sahde rec with the data to use
+		//	* @reutrn the result color
+		//	*/
+  //virtual jlColor
+  //shade(jlShadeRec& sr) override;
 
 		/**
-			* @brief calculate shade
-			* @param sr is the sahde rec with the data to use
+			* @brief calculate shade without shadows
+			* @param sr is the sahde rec with the data to use 
 			* @reutrn the result color
 			*/
   virtual jlColor
-  shade(jlShadeRec& sr) override;
+  normalShade(jlShadeRec& sr) override;
+
+		/**
+			* @brief calculate shade with shadows
+			* @param sr is the sahde rec with the data to use 
+			* @reutrn the result color
+			*/
+  virtual jlColor
+  shadowShade(jlShadeRec& sr) override;
 
 		/**
 			* @brief set ambient reflection coefficient

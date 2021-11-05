@@ -41,6 +41,15 @@ class jlPointLight : public jlLight {
 		virtual jlColor
 		L(jlShadeRec& sr) override;
 
+		/**
+		 * @brief returns if ray hit with another 
+			* @param ray is the ray to cast
+			* @param sr is the shadeRec with data
+		 * @return true if is hit, and that means there is a shadow
+		 */
+		virtual bool
+		inShadow(const jlRay& ray, jlShadeRec& sr) override;
+
  /**
    * @brief set the Radiance Scaling Factor (ls)
    * @param ls is the value to set

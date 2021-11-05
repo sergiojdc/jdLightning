@@ -103,7 +103,7 @@ jlWorld::imguiShowObjectProperties() {
     break;
   }
 
-  imguiShowMaterialProperties();
+  imguiShowMaterialProperties(m_selectedObject->m_pMaterial);
   ImGui::End();
 }
 
@@ -121,7 +121,9 @@ jlWorld::imguiShowBoxProperties() {
 
 void
 jlWorld::imguiShowPlaneProperties() {
-
+  auto plane = std::static_pointer_cast<jlPlane>(m_selectedObject);
+  ImGui::DragFloat3("Position", &plane->m_point.x);
+  ImGui::DragFloat3("Normal", &plane->m_normal.x, 0.05f, 0.0f,1.0f);
 }
 
 void
@@ -130,16 +132,16 @@ jlWorld::imguiShowCylindreProperties() {
 }
 
 void
-jlWorld::imguiShowMaterialProperties() {
-  switch (m_selectedObject->m_pMaterial->m_type) {
+jlWorld::imguiShowMaterialProperties(SPtr<jlMaterial> material) {
+  switch (material->m_type) {
    case MATERIALTYPE::MATTE:
-    imguiShowMatteMaterialProperties();
+    imguiShowMatteMaterialProperties(material);
     break;
    case MATERIALTYPE::PHONG:
-    imguiShowPhongMaterialProperties();
+    imguiShowPhongMaterialProperties(material);
     break;
    case MATERIALTYPE::PLASTIC:
-    imguiShowPlasticMaterialProperties();
+    imguiShowPlasticMaterialProperties(material);
     break;
    default:
     break;
@@ -147,8 +149,8 @@ jlWorld::imguiShowMaterialProperties() {
 }
 
 void
-jlWorld::imguiShowMatteMaterialProperties() {
-  auto matte = std::static_pointer_cast<jlMMatte>(m_selectedObject->m_pMaterial);
+jlWorld::imguiShowMatteMaterialProperties(SPtr<jlMaterial> material) {
+  auto matte = std::static_pointer_cast<jlMMatte>(material);
   auto color = matte->m_diffuseBRDF->m_cd;
   ImGui::ColorEdit3("Color", &color.r);
   ImGui::DragFloat("Ambient reflection coefficient",
@@ -165,8 +167,8 @@ jlWorld::imguiShowMatteMaterialProperties() {
 }
 
 void
-jlWorld::imguiShowPhongMaterialProperties() {
-  auto phong = std::static_pointer_cast<jlMPhong>(m_selectedObject->m_pMaterial);
+jlWorld::imguiShowPhongMaterialProperties(SPtr<jlMaterial> material) {
+  auto phong = std::static_pointer_cast<jlMPhong>(material);
   auto color = phong->m_diffuseBRDF->m_cd;
   ImGui::ColorEdit3("Color", &color.r);
   ImGui::DragFloat("Ambient reflection coefficient",
@@ -193,7 +195,7 @@ jlWorld::imguiShowPhongMaterialProperties() {
 }
 
 void
-jlWorld::imguiShowPlasticMaterialProperties() {
+jlWorld::imguiShowPlasticMaterialProperties(SPtr<jlMaterial> material) {
 
 }
 

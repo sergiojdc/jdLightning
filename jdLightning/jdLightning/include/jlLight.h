@@ -13,6 +13,7 @@
 #include "Prerequisites.h"
 #include "jlVector3.h"
 #include "jlColor.h"
+#include "jlRay.h"
 
 namespace LIGHTTYPES {
 		enum E {
@@ -51,11 +52,20 @@ class jlLight {
   virtual jlColor
   L(jlShadeRec& sr) = 0;
 
+		/**
+		 * @brief returns if ray hit with another 
+			* @param ray is the ray to cast
+			* @param sr is the shadeRec with data
+		 * @return true if is hit and that means there is a shadow
+		 */
+		virtual bool
+		inShadow(const jlRay& ray, jlShadeRec& sr) { return false; };
+
 		LIGHTTYPES::E m_type = LIGHTTYPES::UNKNOW;
 
+		//to check its uses
+		bool m_bCastShadows = true;
  protected:
 
-		//to check its uses
-		bool m_bShadows = false;
 
 };

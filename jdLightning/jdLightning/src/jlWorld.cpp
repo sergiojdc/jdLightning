@@ -129,6 +129,13 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   newSphere->m_pMaterial = phong;
   addObject(newSphere);
 
+  matte.reset(new jlMMatte);
+  matte->setKa(0.25f);
+  matte->setKd(0.65f);
+  matte->setCd({ 0.5f, 0.5f, 0 });
+  SPtr<jlPlane> newPlane(new jlPlane({ 0,0,-1000 }, { 0,0,1 }));
+  newPlane->m_pMaterial = matte;
+  addObject(newPlane);
   //newSphere.reset(new jlSphere({ 0,30,0 }, 60));
   //newSphere->m_color = { 1,1,0 };
   //addObject(newSphere);
