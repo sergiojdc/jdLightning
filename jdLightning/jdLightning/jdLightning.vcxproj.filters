@@ -117,6 +117,9 @@
     <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlGOCylinder.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Prerequisites.h">
@@ -198,6 +201,9 @@
       <Filter>Archivos de encabezado\Materials</Filter>
     </ClInclude>
     <ClInclude Include="include\jlGOBox.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGOCylinder.h">
       <Filter>Archivos de encabezado\GeometryObjects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,12 +28,13 @@ namespace GEOMETRITYPE {
 
 class jlGeometricObject {
  public:
-		/**
-			* @brief function to detected a hit
-			* @param ray is the ray whit check the hit
-			* @pram tmin is the theta minimun
-			* @pram sr is the shade rec
-			*/
+  /**
+   * @brief function to detected a hit
+   * @param ray is the ray whit check the hit
+   * @pram tmin is to check the nearest 
+   * @pram sr is the shade rec
+   * @return true if tha ray hit with it
+   */
   virtual bool
   hit(const jlRay& ray, double& tmin, jlShadeRec& sr) { 
 				UNREFERENCED_PARAMETER(ray);
@@ -42,6 +43,12 @@ class jlGeometricObject {
 				return false; 
 		};
 
+		/**
+			* @brief function to detected if the object is in shadow
+			* @param ray is the ray whit check the hit
+			* @pram tmin is to check the nearest
+			* @return true if tha ray hit with it
+			*/
 		virtual bool
 		shadowHit(const jlRay& ray, float& tmin) {
 				UNREFERENCED_PARAMETER(ray);
@@ -59,7 +66,14 @@ class jlGeometricObject {
 	 	* @brief object Material
 	 	*/
 		SPtr<jlMaterial> m_pMaterial;
-
-		//Material* m_pMaterial;
+		
+		/**
+			* @brief the type of the geometri object
+			*/
 		GEOMETRITYPE::E m_type = GEOMETRITYPE::UNKNOW;
+
+		/**
+   * @brief point through which
+   */
+  jlVector3 m_position;
 };

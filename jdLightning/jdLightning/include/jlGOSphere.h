@@ -34,11 +34,17 @@ class jlSphere : public jlGeometricObject {
    * @param ray is the ray whit check the hit
    * @pram tmin is to check the nearest
    * @pram sr is the shade rec
-   * @return true if the ray hit it
+   * @return true if tha ray hit with it
    */
   virtual bool
   hit(const jlRay& ray, double& tmin, jlShadeRec& sr) override;
 
+  /**
+   * @brief function to detected if the object is in shadow
+   * @param ray is the ray whit check the hit
+   * @pram tmin is to check the nearest
+   * @return true if tha ray hit with it
+   */
   virtual bool
   shadowHit(const jlRay& ray, float& tmin) override;
 
@@ -46,11 +52,6 @@ class jlSphere : public jlGeometricObject {
    * @brief defaul destructor
    */
   ~jlSphere() {};
-
-  /**
-   * @brief point through which
-   */
-  jlVector3 m_position;
 
   /**
    * @brief normal to the plane

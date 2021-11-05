@@ -29,6 +29,20 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
+class jlSphere;
+class jlPlane;
+class jlBox;
+class jlCylinder;
+class jlMaterial;
+class jlMMatte;
+class jlMPhong;
+class jlMPlastic;
+class jlBRDF;
+class jlBRDFLambertian;
+class jlBRDFGlossySpecular;
+class jlLAmbient;
+class jlPointLight;
+
 class jlWorld {
  public:
   /**
@@ -243,7 +257,6 @@ class jlWorld {
    * @brief ambient light
    */
   SPtr<jlLight> m_pAmbientLight = nullptr;
-  SPtr<jlLight> m_pPointLight = nullptr;
 
   /**
    * @brief vector with lights in scene
@@ -282,18 +295,35 @@ class jlWorld {
    * @brief bool to let the thread run indefini
    */
   bool run = true;
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//   Premade objects
+//   Objects ready only for copy in new objects or change in the already created
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+  SPtr<jlSphere> m_pDefaultSphere;
+  SPtr<jlPlane> m_pDefaultPlane;
+  SPtr<jlBox> m_pDefaultBox;
+  SPtr<jlCylinder> m_pDefaultCylinder;
+
+  SPtr<jlMMatte> m_pDefaultMMatte;
+  SPtr<jlMPhong> m_pDefaultMPhong;
+  SPtr<jlMPlastic> m_pDefaultMPlastic;
   
+  SPtr<jlBRDFLambertian> m_pDefaultBRDFLambertian;
+  SPtr<jlBRDFGlossySpecular> m_pDefaultBRDFGlossySpecular;
+
+  SPtr<jlLAmbient> m_pDefaultLAmbient;
+  SPtr<jlPointLight> m_pDefaultPointLight;
+
+
+  Vector<char*> m_MaterialsListString;
+  Vector<char*> m_geometriObjectsListString;
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 //   IMGUI FUNCTIONS
 //   FOR INTERFACE (MAYBE CHANGE THE CPP OF THEM)
 //////////////////////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @brief temporal function to modify a point light (can use for future)
-   */
-  void 
-  modifyPointlight();
-
   /**
    * @brief function to modify the ambient light
    */
@@ -385,13 +415,15 @@ class jlWorld {
   imguiShowCameraProperties();
 
   /**
-   * @brief vector with all objects in scene
+   * @brief selected object
    */
   SPtr<jlGeometricObject> m_selectedObject;
+  uint32 m_selectedObjectIdx;
 
   /**
-   * @brief vector with all objects in scene
+   * @brief selected light
    */
   SPtr<jlLight> m_selectedLight;
+  uint32 m_selectedLightIdx;
 
 };

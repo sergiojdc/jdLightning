@@ -14,8 +14,8 @@ jlMPlastic::normalShade(jlShadeRec& sr) {
   float ndotwi;
 
   for (uint32 i = 0; i < numLights; i++) {
-    jlVector3 wi = sr.m_world->m_sceneLights[i]->getDirection(sr);
-    float ndotwi = sr.m_normal.dot(wi);
+    wi = sr.m_world->m_sceneLights[i]->getDirection(sr);
+    ndotwi = sr.m_normal.dot(wi);
     if (ndotwi > 0.0f) {
       L += (m_diffuseBRDF->f(sr, wi, wo) + m_specularBRDF->f(sr, wi, wo)) * //change wi for wo and viceversa
         sr.m_world->m_sceneLights[i]->L(sr) *

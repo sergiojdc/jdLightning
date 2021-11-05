@@ -59,11 +59,21 @@ class jlLight {
 		 * @return true if is hit and that means there is a shadow
 		 */
 		virtual bool
-		inShadow(const jlRay& ray, jlShadeRec& sr) { return false; };
+		inShadow(const jlRay& ray, jlShadeRec& sr) { 
+				UNREFERENCED_PARAMETER(ray);
+				UNREFERENCED_PARAMETER(sr);
+				return false; 
+		};
 
+		/**
+			* @brief the type of the light
+			*/
 		LIGHTTYPES::E m_type = LIGHTTYPES::UNKNOW;
 
 		//to check its uses
+		/**
+			* @brief to cast or not shadows
+			*/
 		bool m_bCastShadows = true;
  protected:
 

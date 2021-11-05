@@ -1,9 +1,9 @@
 #include "jlGOPlane.h"
 
-const double jlPlane::kEpsilon = 0.00001;
+const double jlPlane::kEpsilon = 0.001;
 
 jlPlane::jlPlane(const jlVector3 point, const jlNormal& normal) {
-  m_point = point;
+  m_position = point;
   m_normal = normal;
   m_type = GEOMETRITYPE::PLANE;
 }
@@ -16,7 +16,7 @@ jlPlane::hit(const jlRay& ray, double& tmin, jlShadeRec& sr) {
 //to test //can be optimized if compare kepsilon with this  if (relationship < 0) to test
   auto relationship = ray.m_direction.dot(m_normal);
   //get vector between center of plane and ray's origin
-  auto vec = m_point - ray.m_origin;
+  auto vec = m_position - ray.m_origin;
   auto vecNorm = vec.dot(m_normal);
   //get how nearly is the point to ray, the distance from the ray to the point
   //in this case, if the distances is positive the object is in front of ray and it can be drawn
@@ -27,6 +27,16 @@ jlPlane::hit(const jlRay& ray, double& tmin, jlShadeRec& sr) {
     tmin = t;
     sr.m_normal = m_normal;
     sr.m_localHitPoint = ray.m_origin + (float)t * ray.m_direction;
+    return true;
+  }
+  return false;
+}
+
+bool jlPlane::shadowHit(const jlRay& ray, float& tmin) {
+  auto vec = m_position - ray.m_origin;
+  float t = vec.dot(m_normal) / (ray.m_direction.dot(m_normal));
+  if (t > kEpsilon) {
+    tmin = t;
     return true;
   }
   return false;

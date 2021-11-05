@@ -24,6 +24,15 @@ class jlMMatte : public jlMaterial {
 				m_diffuseBRDF.reset(new jlBRDFLambertian);
 				m_type = MATERIALTYPE::MATTE;
 		};
+
+		/**
+			* @brief copy constructor
+			*/
+		jlMMatte(jlMMatte& mat) {
+				m_ambientBRDF.reset(new jlBRDFLambertian(*mat.m_ambientBRDF.get()));
+				m_diffuseBRDF.reset(new jlBRDFLambertian(*mat.m_diffuseBRDF.get()));
+				m_type = MATERIALTYPE::MATTE;
+		};
 		
 		/**
 			* @brief default destructor
@@ -80,6 +89,7 @@ class jlMMatte : public jlMaterial {
   setCd(const jlColor& c) {
     m_ambientBRDF->setDiffuseColor(c);
 				m_diffuseBRDF->setDiffuseColor(c);
+				m_color = c;
   }
 
 		/**

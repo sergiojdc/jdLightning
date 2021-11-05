@@ -9,6 +9,8 @@
 #include "jlTRayCast.h"
 //Geometri objects
 #include "jlGOPlane.h"
+#include "jlGOBox.h"
+#include "jlGOCylinder.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -19,6 +21,7 @@
 //Materials
 #include "jlMMatte.h"
 #include "jlMPhong.h"
+#include "jlMPlastic.h"
 
 void 
 jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
@@ -35,7 +38,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_threadsFinished.resize(m_numCpus);
     m_threadsFinishedFirst.resize(m_numCpus);
     uint32 widthPerCpus = width / m_numCpus; // get number of pixel on widht per cpu
-    uint32 CpusWithExtra = height % m_numCpus; // check if have decimal to repart the extra width
+    uint32 CpusWithExtra = width % m_numCpus; // check if have decimal to repart the extra width
 
     uint32 currentWidthIdx = 0;
     //uint32 currentHeightIdx = 0;
@@ -45,7 +48,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
       uint32 numIndexWidth = widthPerCpus;
       m_threadsFinished[i] = false;
       m_threadsFinishedFirst[i] = false;
-      if (i < CpusWithExtra) {  
+      if (i < CpusWithExtra) {
         numIndexWidth++;
       }
       m_IndexImageWidth[i].resize(numIndexWidth);
@@ -62,6 +65,41 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
     m_threadsFinished.resize(1);
     m_threadsFinishedFirst.resize(1);
   }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// create list of things
+//////////////////////////////////////////////////////////////////////////////////////////////
+  //materials
+  m_MaterialsListString.resize(3);
+  String name = "Matte";
+  char* cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_MaterialsListString[0] = cname;
+  name = "Phong";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_MaterialsListString[1] = cname;
+  name = "Plastic";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_MaterialsListString[2] = cname;
+  //objects
+  name = "Plane";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
+  name = "Sphere";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
+  name = "Box";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
+  name = "Cylinder";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Prepare view plane and samples
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,51 +136,103 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   //m_pTracer.reset(new jlTMultipleObjects(this));
   m_pTracer.reset(new jlTRayCast(this));
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Create prefabs
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+//BRDF
+  //Lambertian
+  m_pDefaultBRDFLambertian.reset(new jlBRDFLambertian({0.2f, 1.0f, 0.0f}, 0.5f));
+  //Glossy specular
+  m_pDefaultBRDFGlossySpecular.reset(new jlBRDFGlossySpecular({ 0.2f, 1.0f, 0.0f }, 0.5f));
+//Materials  
+  //Matte material
+  m_pDefaultMMatte.reset(new jlMMatte);
+  m_pDefaultMMatte->setKa(0.25f);
+  m_pDefaultMMatte->setKd(0.65f);
+  m_pDefaultMMatte->setCd({ 1, 1, 0 });
+  //Phong material
+  m_pDefaultMPhong.reset(new jlMPhong);
+  m_pDefaultMPhong->setCd({ 0, 1, 0 });
+  m_pDefaultMPhong->setKa(0.25f);
+  m_pDefaultMPhong->setKd(0.5f);
+  m_pDefaultMPhong->setKs(0.5f);
+  m_pDefaultMPhong->setSpecularExponent(1);
+  //Plastic material
+  m_pDefaultMPlastic.reset(new jlMPlastic);
+  m_pDefaultMPlastic->m_ambientBRDF.reset(new jlBRDFLambertian(*m_pDefaultBRDFLambertian));
+  m_pDefaultMPlastic->m_diffuseBRDF.reset(new jlBRDFLambertian(*m_pDefaultBRDFLambertian));
+  m_pDefaultMPlastic->m_specularBRDF.reset(new jlBRDFLambertian(*m_pDefaultBRDFLambertian));
+//Lights
+  //Ambient light
+  m_pDefaultLAmbient.reset(new jlLAmbient(1, { 1, 1, 1 }));
+  //Point light
+  m_pDefaultPointLight.reset(new jlPointLight);
+  m_pDefaultPointLight->setPosition({ 0, 0, 0 });
+  m_pDefaultPointLight->setRadianceScalingFactor(3.0f);
+//Geometri Objects
+  //Sphere
+  m_pDefaultSphere.reset(new jlSphere);
+  m_pDefaultSphere->m_position = { 0, 0, 0 };
+  m_pDefaultSphere->m_radius = 50.0f;
+  m_pDefaultSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //Plane
+  m_pDefaultPlane.reset(new jlPlane({ 0,0,-1000 }, { 0,0,1 }));
+  m_pDefaultPlane->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //Box
+  m_pDefaultBox.reset(new jlBox({ -25,-25,-25 }, { 25,25,25 }, { 0,0,0 }, { 0,-25,0 }));
+  m_pDefaultBox->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //Cylinder
+  m_pDefaultCylinder.reset(new jlCylinder(50, 100, { 0,0,0 }));
+  m_pDefaultCylinder->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Create and add objects to scene wiht their materials
 //////////////////////////////////////////////////////////////////////////////////////////////
   m_sphere = jlSphere({0,0,0}, 40.0f);
 
-  SPtr<jlMMatte> matte(new jlMMatte);
-  matte->setKa(0.25f);
-  matte->setKd(0.65f);
-  matte->setCd({ 1, 1, 0 });
-  SPtr<jlSphere> newSphere(new jlSphere);
+  
+  SPtr<jlSphere> newSphere(new jlSphere(*m_pDefaultSphere));
   newSphere->m_position = { 90, -25, 0 };
   newSphere->m_radius = 80.0f;
-  newSphere->m_color = { 1,0,0 };
-  newSphere->m_pMaterial = matte;
+  //newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
   addObject(newSphere);
 
-  SPtr<jlMPhong> phong(new jlMPhong);
-  phong->setCd({ 0, 1, 0 });
-  phong->setKa(0.25f);
-  phong->setKd(0.5f);
-  phong->setKs(0.5f);
-  phong->setSpecularExponent(1);
-
-  newSphere.reset(new jlSphere);
+  newSphere.reset(new jlSphere(*m_pDefaultSphere));
   newSphere->m_position = { -90, -25, 0 };
   newSphere->m_radius = 80.0f;
-  newSphere->m_color = { 1,0,0 };
-  newSphere->m_pMaterial = phong;
+  newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
   addObject(newSphere);
 
-  matte.reset(new jlMMatte);
+  SPtr<jlBox> newbox(new jlBox(*m_pDefaultBox));
+  newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newbox);
+  //newbox.reset(new jlBox(*m_pDefaultBox));
+  //newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newbox);
+
+  SPtr<jlCylinder> newcylinder(new jlCylinder(*m_pDefaultCylinder));
+  newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newcylinder);
+  //newcylinder.reset(new jlCylinder(*m_pDefaultCylinder));
+  //newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newcylinder);
+
+  SPtr<jlMMatte> matte(new jlMMatte(*m_pDefaultMMatte));
   matte->setKa(0.25f);
   matte->setKd(0.65f);
   matte->setCd({ 0.5f, 0.5f, 0 });
   SPtr<jlPlane> newPlane(new jlPlane({ 0,0,-1000 }, { 0,0,1 }));
   newPlane->m_pMaterial = matte;
   addObject(newPlane);
-  //newSphere.reset(new jlSphere({ 0,30,0 }, 60));
-  //newSphere->m_color = { 1,1,0 };
-  //addObject(newSphere);
-  //
-  //SPtr<jlPlane> newPLane(new jlPlane({ 0,0,0 }, {0,1,1}));
-  //newPLane->m_color = { 0, 0.3f, 0 };
-  //addObject(newPLane);
+
+  matte.reset(new jlMMatte(*m_pDefaultMMatte));
+  matte->setKa(0.25f);
+  matte->setKd(0.65f);
+  matte->setCd({ 0.5f, 0.0f, 0.5f });
+  newPlane.reset(new jlPlane({ 0,-1000,0 }, { 0, 1, 0 }));
+  newPlane->m_pMaterial = matte;
+  addObject(newPlane);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Create and add Lights to scene
@@ -151,10 +241,9 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   m_pAmbientLight.reset(new jlLAmbient(1, {1, 1, 1}));
 
   SPtr<jlPointLight> pointLight(new jlPointLight);
-  pointLight->setPosition({100, 50, 50});
+  pointLight->setPosition({0, 50, 500});
   pointLight->setRadianceScalingFactor(3.0f);
   addLight(pointLight);
-  m_pPointLight = pointLight;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,12 +365,16 @@ void jlWorld::renderScene() {
     }
   }
 
+  uint32 materialListNum = (uint32)m_MaterialsListString.size();
+  for (uint32 i = 0; i < materialListNum; ++i)
+    delete[] m_MaterialsListString[i];
+
   ImGui::SFML::Shutdown();
 }
 
 void 
 jlWorld::openWindow(const uint32 width, const uint32 height) {
-  m_window = new sf::RenderWindow(sf::VideoMode(width, height), "My window");
+  m_window = new sf::RenderWindow(sf::VideoMode(width, height), "Jade Lightning");
   // Create a image filled with black color
   ImGui::SFML::Init(*m_window);
   ImGuiIO& io = ImGui::GetIO();

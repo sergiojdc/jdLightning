@@ -44,13 +44,24 @@ class jlBox : public jlGeometricObject {
   /**
    * @brief function to detected a hit
    * @param ray is the ray whit check the hit
-   * @pram t is the theta minimun
-   * @pram s is the shade rec
+   * @pram tmin is to check the nearest
+   * @pram sr is the shade rec
+   * @return true if tha ray hit with it
    */
   virtual bool
   hit(const jlRay& ray, double& t, jlShadeRec& s) override;
 
+  /**
+   * @brief function to detected if the object is in shadow
+   * @param ray is the ray whit check the hit
+   * @pram tmin is to check the nearest
+   * @return true if tha ray hit with it
+   */
+  virtual bool
+  shadowHit(const jlRay& ray, float& tmin) override;
+
  private:
+friend class jlWorld;
 		/**
    * @brief min box position 
    */
@@ -70,11 +81,6 @@ class jlBox : public jlGeometricObject {
    * @brief real max box position, calculate with the min range, box's position and offset
    */
   jlVector3 m_realMax;
-
-  /**
-   * @brief box position
-   */
-  jlVector3 m_position;
 
   /**
    * @brief box position offset

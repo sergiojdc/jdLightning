@@ -95,5 +95,13 @@ class jlMaterial {
     return { 0, 0, 0 };
   };
 
+		/**
+			* @brief the type of the material
+			*/
 		MATERIALTYPE::E m_type = MATERIALTYPE::UKNOW;
+
+		/**
+			* @brief color for copy when change the material
+			*/
+		jlColor m_color;
 };

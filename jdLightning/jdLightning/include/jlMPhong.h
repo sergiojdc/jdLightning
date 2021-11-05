@@ -28,6 +28,16 @@ class jlMPhong : public jlMaterial {
 		};
 
 		/**
+			* @brief copy constructor
+			*/
+		jlMPhong(jlMPhong& mat) {
+				m_ambientBRDF.reset(new jlBRDFLambertian(*mat.m_ambientBRDF));
+				m_diffuseBRDF.reset(new jlBRDFLambertian(*mat.m_diffuseBRDF));
+				m_specularBRDF.reset(new jlBRDFGlossySpecular(*mat.m_specularBRDF));
+				m_type = MATERIALTYPE::PHONG;
+		}
+
+		/**
 			* @brief default destructor
 			*/
 		~jlMPhong() {};
@@ -92,6 +102,7 @@ class jlMPhong : public jlMaterial {
     m_ambientBRDF->setDiffuseColor(c);
 				m_diffuseBRDF->setDiffuseColor(c);
 				m_specularBRDF->setColor(c);
+				m_color = c;
   }
 
 		void
