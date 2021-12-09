@@ -3,10 +3,11 @@
 #include "jlWorld.h"
 
 jlColor 
-jlMPlastic::normalShade(jlShadeRec& sr) {
+jlMPlastic::normalShade(jlShadeRec& sr, uint32 sampleIndex) {
   if (!m_ambientBRDF || !m_diffuseBRDF || !m_specularBRDF)
     return { 0, 0 ,0 };
   
+  UNREFERENCED_PARAMETER(sampleIndex);
   jlVector3 wo = -sr.m_ray.m_direction;
   jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr);
   uint32 numLights = (uint32)sr.m_world->m_sceneLights.size();
@@ -26,12 +27,12 @@ jlMPlastic::normalShade(jlShadeRec& sr) {
 }
 
 jlColor 
-jlMPlastic::shadowShade(jlShadeRec& sr) {
+jlMPlastic::shadowShade(jlShadeRec& sr, uint32 sampleIndex) {
   if (!m_ambientBRDF || !m_diffuseBRDF || !m_specularBRDF)
     return { 0, 0 ,0 };
 
   jlVector3 wo = -sr.m_ray.m_direction;
-  jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr);
+  jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr, sampleIndex);
   uint32 numLights = (uint32)sr.m_world->m_sceneLights.size();
   jlVector3 wi;
   float ndotwi;

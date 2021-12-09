@@ -18,6 +18,7 @@
 //Lights
 #include "jlLAmbient.h"
 #include "jlPointLight.h"
+#include "jlLAmbientOccluder.h"
 //Materials
 #include "jlMMatte.h"
 #include "jlMPhong.h"
@@ -26,13 +27,51 @@
 void
 jlWorld::imguiAmbientLight() {
   ImGui::Begin("Ambient Light");
+  int32 alightType = m_pAmbientLight->m_type;
+  int32 alightindex = 0;
+  int32 alightcurrentIndex = 0;
+  switch (m_pAmbientLight->m_type)
+  {
+  case LIGHTTYPES::AMBIENT:
+    alightType = LIGHTTYPES::AMBIENT;
+    alightcurrentIndex = 0;
+    break;
+  case LIGHTTYPES::AMBIENTOCCLUDER:
+    alightType = LIGHTTYPES::AMBIENTOCCLUDER;
+    alightcurrentIndex = 1;
+    break;
+  }
+  alightindex = alightcurrentIndex;
+  ImGui::Separator();
+  String OptionPreviw = m_ambientLightsListString[alightcurrentIndex];
+  if (ImGui::BeginCombo("Ambient Lights", OptionPreviw.c_str())) {
+    OptionPreviw = "";
+    ImGui::ListBox("Alight",
+      &alightindex,
+      &m_ambientLightsListString[0],
+      (int32)m_ambientLightsListString.size());
+    ImGui::EndCombo();
+  }
+  if (alightindex != alightcurrentIndex) {
+    
+    if (alightindex == 0) {
+      m_pAmbientLight = m_pDefaultLAmbient;
+    }
+    if (alightindex == 1) {
+      m_pAmbientLight = m_pDefaultLAmbientOccluder;
+    }
+  }
+
   auto al = std::static_pointer_cast<jlLAmbient>(m_pAmbientLight);
   auto ls = al->getRadianceScalingFactor();
   auto col = al->getColor();
 
   ImGui::DragFloat("radiance scaling factor ", &ls, 0.05f);
-  ImGui::ColorEdit3("Position", &col.x);
-
+  ImGui::ColorEdit3("Color", &col.x);
+  if (m_pAmbientLight->m_type == LIGHTTYPES::AMBIENTOCCLUDER) {
+    auto occluder = std::static_pointer_cast<jlLAmbientOccluder>(m_pAmbientLight);
+    ImGui::ColorEdit3("minAmount", &occluder->m_minAmount.x);
+  }
   al->setRadianceScalingFactor(ls);
   al->setColor(col);
 
@@ -288,22 +327,24 @@ jlWorld::imguiShowLights() {
   ImGui::Begin("SceneLights");
   ImGui::CloseCurrentPopup();
   uint32 lights = (uint32)m_sceneLights.size();
-  for (uint32 i = 0; i < lights; i++) {
+  for (uint32 i = 0; i < lights; ++i) {
     String name = "Light " + std::to_string(i);
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanFullWidth |
-      ImGuiTreeNodeFlags_OpenOnArrow |
-      ImGuiTreeNodeFlags_OpenOnDoubleClick |
-      ImGuiTreeNodeFlags_Leaf |
-      ImGuiTreeNodeFlags_Bullet;
+                               ImGuiTreeNodeFlags_OpenOnArrow |
+                               ImGuiTreeNodeFlags_OpenOnDoubleClick |
+                               ImGuiTreeNodeFlags_Leaf |
+                               ImGuiTreeNodeFlags_Bullet;
     if (m_selectedLight == m_sceneLights[i]) {
       flags |= ImGuiTreeNodeFlags_Selected;
     }
-    ImGui::TreeNodeEx(name.c_str(), flags);
-    if (ImGui::IsItemClicked()) {
-      m_selectedLight = m_sceneLights[i];
-      m_selectedLightIdx = i;
+    if (ImGui::TreeNodeEx(name.c_str(), flags))
+    {
+      if (ImGui::IsItemClicked()) {
+        m_selectedLight = m_sceneLights[i];
+        m_selectedLightIdx = i;
+      }
+      ImGui::TreePop();
     }
-    ImGui::TreePop();
   }
   ImGui::End();
 }

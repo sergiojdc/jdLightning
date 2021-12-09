@@ -489,12 +489,11 @@ namespace jlUtilitiesSDK {
 
   FORCEINLINE float
   jlVector3::squareMagnitude() const {
-    float result = x * x + y * y + z * z;
-    if (result < 0)
-    {
-    result = 0.000001f;
+    float mag = x * x + y * y + z * z;
+    if (mag <= 0) {
+      mag = 0.000001f;
     }
-    return result;
+    return mag;
   }
 
   FORCEINLINE float

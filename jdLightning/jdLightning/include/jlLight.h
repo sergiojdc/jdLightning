@@ -19,6 +19,7 @@ namespace LIGHTTYPES {
 		enum E {
 				AMBIENT = 0,
 				POINT,
+				AMBIENTOCCLUDER,
 				NUMLIGHTS,
 				UNKNOW
 		};
@@ -43,14 +44,41 @@ class jlLight {
 			* @return a vector3 with the direction
 			*/
   virtual jlVector3
-  getDirection(jlShadeRec& sr) = 0;
+  getDirection(jlShadeRec& sr, uint32 sampleIndex = 0) {
+				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
+				return { 0,0,0 };
+		};
+
+		/**
+			* @brief returns the direction of the incoming light at a hit point
+			* @param sr is the shadeRec with data
+			* @param u is right vector for hemisphere
+			* @param v is up vector for hemisphere
+			* @param w is front vector for hemisphere
+			* @param sampleIndex iuf for optimized sampler only, is the index of sampler
+			* @return a vector3 with the direction
+			*/
+		virtual jlVector3
+		getDirection(jlShadeRec& sr, 
+               const jlVector3& u, 
+               const jlVector3& v, 
+               const jlVector3& w, 
+               uint32 sampleIndex = 0) {
+				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(u);
+				UNREFERENCED_PARAMETER(v);
+				UNREFERENCED_PARAMETER(w);
+				UNREFERENCED_PARAMETER(sampleIndex);
+				return { 0,0,0 };
+		};
 
 		/**
 			* @brief returns the incident radiance at a hit point
 			* @return a color with the incident radiance
 			*/
   virtual jlColor
-  L(jlShadeRec& sr) = 0;
+  L(jlShadeRec& sr, uint32 sampleIndex = 0) = 0;
 
 		/**
 		 * @brief returns if ray hit with another 

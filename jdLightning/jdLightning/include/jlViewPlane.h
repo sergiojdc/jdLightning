@@ -116,5 +116,5 @@ class jlViewPlane {
   /**
    * @brief to show color out of gamma
    */
-  bool m_bShowOutOfGamut = false;
+  bool m_bShowOutOfGamut = true;
 };

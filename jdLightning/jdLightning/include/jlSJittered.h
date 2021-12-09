@@ -39,7 +39,7 @@ class jlSJittered : public jlSampler {
   virtual void
   generateSamples() override {
 				auto n = (int32)sqrt(m_numSamples);
-				for (uint32 p = 0; p < m_numSets; p++) {
+				if (omtimized) {
 						for (int32 j = 0; j < n; j++) {
 								for (int32 k = 0; k < n; k++) {
 										jlVector2 sp((k + jlRandom::randomFloat()) / n,
@@ -48,5 +48,17 @@ class jlSJittered : public jlSampler {
 								}
 						}
 				}
+				else{
+						for (uint32 p = 0; p < m_numSets; p++) {
+								for (int32 j = 0; j < n; j++) {
+										for (int32 k = 0; k < n; k++) {
+												jlVector2 sp((k + jlRandom::randomFloat()) / n,
+														           (j + jlRandom::randomFloat()) / n);
+												m_samples.push_back(sp);
+										}
+								}
+						}
+				}
+				
 		};
 };

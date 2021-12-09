@@ -3,13 +3,15 @@
 #include "jlWorld.h"
 
 jlVector3 
-jlPointLight::getDirection(jlShadeRec& sr) {
+jlPointLight::getDirection(jlShadeRec& sr, uint32 sampleIndex) {
+  UNREFERENCED_PARAMETER(sampleIndex);
   return (m_position - sr.m_HitPoint).getnormalize();
 }
 
 jlColor 
-jlPointLight::L(jlShadeRec& sr) {
+jlPointLight::L(jlShadeRec& sr, uint32 sampleIndex) {
   UNREFERENCED_PARAMETER(sr);
+  UNREFERENCED_PARAMETER(sampleIndex);
   return m_ls * m_color;
 }
 

@@ -56,10 +56,12 @@ jlCPinhole::renderSceneSoftware(jlWorld* world) {
         for (uint32 cheight = 0; cheight < vp.m_hRes; ++cheight) { // across 
           if (!world->run)
             break;
+
+          ray.m_origin = m_eye;
           L = black;
           //Sampler
           for (uint32 s = 0; s < vp.m_numSamples; ++s) {
-            sp = vp.m_pSampler->sampleUnitSquare();
+            sp = vp.m_pSampler->sampleUnitSquare(s);
             pp.x = float(vp.m_pixelSize * (cwidth - 0.5 * vp.m_wRes + sp.x));
             pp.y = float(vp.m_pixelSize * (cheight - 0.5 * vp.m_hRes + sp.y));
             ray.m_direction = rayDirection(pp);
@@ -106,12 +108,12 @@ jlCPinhole::renderThread(jlWorld* world, int threadIdx) {
         uint32 currentX = array[width];
         
         for (uint32 j = 0; j < vp.m_numSamples; j++) {
-          sp = vp.m_pSampler->sampleUnitSquare();
+          sp = vp.m_pSampler->sampleUnitSquare(j);
           pp.x = (float)(vp.m_pixelSize * (currentX - 0.5 * vp.m_wRes + sp.x));
           pp.y = (float)(vp.m_pixelSize * (height - 0.5 * vp.m_hRes + sp.y));
           ray.m_direction = rayDirection(pp);
           //L += world->m_pTracer->traceRay(ray);
-          L += world->m_pTracer->traceRay(ray, depth);
+          L += world->m_pTracer->traceRay(ray, depth, j);
         }
         L /= (float)vp.m_numSamples;
         L *= m_exposureTime;

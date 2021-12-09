@@ -2,8 +2,8 @@
 /**
 	* @file    jlTRayCast.h
 	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
-	* @date    2/11/2021
-	* @brief   A class for a RayCast tracer
+	* @date    07/12/2021
+	* @brief   A class for a Area Light tracer
 	*
 	*
 	* @bug	    No known bugs.
@@ -16,23 +16,23 @@
 #include "jlWorld.h"
 #include "jlMaterial.h"
 
-class jlTRayCast : public jlTracer { 
- public:
+class jlTAreaLight : public jlTracer {
+public:
 		/**
 			* @brief default constructor
 			*/
-		jlTRayCast() = default;
+		jlTAreaLight() = default;
 
 		/**
 			* @brief constructor with world
 			* @param world is a pointer to the world
 			*/
-		jlTRayCast(jlWorld* world) { m_world = world; };
+		jlTAreaLight(jlWorld* world) { m_world = world; };
 
 		/**
 			* @brief default destructor
 			*/
-		~jlTRayCast() {};
+		~jlTAreaLight() {};
 
 		/**
 			* @brief virtual method for check if the ray hit with geometri with depth
@@ -44,13 +44,13 @@ class jlTRayCast : public jlTracer {
 		traceRay(const jlRay& ray, uint32 depth, uint32 sampleIndex = 0) const override {
 				UNREFERENCED_PARAMETER(depth);
 				jlShadeRec sr(m_world->hitObjects(ray));
-				if (sr.m_hitAnObject)	{
+				if (sr.m_hitAnObject) {
 						sr.m_ray = ray;
-						return sr.m_pMaterial->shade(sr, sampleIndex);
+						return sr.m_pMaterial->areaLightShade(sr, sampleIndex);
 				}
 				return m_world->m_backgroundColor;
 		};
 
- private:
+private:
 
 };

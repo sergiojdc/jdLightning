@@ -53,7 +53,7 @@ class jlMMatte : public jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  normalShade(jlShadeRec& sr) override;
+  normalShade(jlShadeRec& sr, uint32 sampleIndex = 0) override;
 
 		/**
 			* @brief calculate shade with shadows
@@ -61,7 +61,7 @@ class jlMMatte : public jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  shadowShade(jlShadeRec& sr) override;
+  shadowShade(jlShadeRec& sr, uint32 sampleIndex = 0) override;
 
 		/**
 			* @brief set ambient reflection coefficient

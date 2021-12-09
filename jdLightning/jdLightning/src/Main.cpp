@@ -3,7 +3,7 @@
 int 
 main() {
   jlWorld w;
-  w.build(1920,1080);
+  w.build(800,800);
   w.renderScene();
   return 0;
 }

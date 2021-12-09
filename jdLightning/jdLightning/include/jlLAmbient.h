@@ -39,8 +39,9 @@ class jlLAmbient : public jlLight {
 			* @return a vector3 with the direction
 			*/
   virtual jlVector3
-		getDirection(jlShadeRec& sr) override {
+		getDirection(jlShadeRec& sr, uint32 sampleIndex = 0) override {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
 				return { 0, 0, 0 };
 		};
 
@@ -49,8 +50,9 @@ class jlLAmbient : public jlLight {
 			* @return a color with the incident radiance
 			*/
   virtual jlColor
-  L(jlShadeRec& sr) override {
+  L(jlShadeRec& sr, uint32 sampleIndex = 0) override {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
 				return m_color * m_ls;
 		};
 

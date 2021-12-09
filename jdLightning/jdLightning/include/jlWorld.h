@@ -41,6 +41,7 @@ class jlBRDF;
 class jlBRDFLambertian;
 class jlBRDFGlossySpecular;
 class jlLAmbient;
+class jlLAmbientOccluder;
 class jlPointLight;
 
 class jlWorld {
@@ -314,11 +315,13 @@ class jlWorld {
   SPtr<jlBRDFGlossySpecular> m_pDefaultBRDFGlossySpecular;
 
   SPtr<jlLAmbient> m_pDefaultLAmbient;
+  SPtr<jlLAmbientOccluder> m_pDefaultLAmbientOccluder;
   SPtr<jlPointLight> m_pDefaultPointLight;
 
 
   Vector<char*> m_MaterialsListString;
   Vector<char*> m_geometriObjectsListString;
+  Vector<char*> m_ambientLightsListString;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //   IMGUI FUNCTIONS

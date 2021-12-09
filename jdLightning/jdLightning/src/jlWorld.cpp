@@ -18,6 +18,7 @@
 //Lights
 #include "jlLAmbient.h"
 #include "jlPointLight.h"
+#include "jlLAmbientOccluder.h"
 //Materials
 #include "jlMMatte.h"
 #include "jlMPhong.h"
@@ -100,11 +101,20 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   cname = new char[name.size() + 1];
   strcpy(cname, name.c_str());
   m_geometriObjectsListString.push_back(cname);
+
+  name = "Simple AmbientLight";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_ambientLightsListString.push_back(cname);
+  name = "AmbientOccluder";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_ambientLightsListString.push_back(cname);
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Prepare view plane and samples
 //////////////////////////////////////////////////////////////////////////////////////////////
-  SPtr<jlSJittered> sampler(new jlSJittered(1));
-  //SPtr<jlSRegular> sampler(new jlSRegular(255));
+  SPtr<jlSJittered> sampler(new jlSJittered(16));
+  //SPtr<jlSRegular> sampler(new jlSRegular(16));
   m_vp = jlViewPlane(width, height, 1.0f, 1.0f, 255, sampler);
   sampler->setNumSets(width * height);
   time.reset();
@@ -170,6 +180,10 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   m_pDefaultPointLight.reset(new jlPointLight);
   m_pDefaultPointLight->setPosition({ 0, 0, 0 });
   m_pDefaultPointLight->setRadianceScalingFactor(3.0f);
+  
+  m_pDefaultLAmbientOccluder.reset(new jlLAmbientOccluder(1.0f, { 1,1,1 }));
+  m_pDefaultLAmbientOccluder->setMinAmount({ 0,0,0 });
+  m_pDefaultLAmbientOccluder->setSampler(sampler);
 //Geometri Objects
   //Sphere
   m_pDefaultSphere.reset(new jlSphere);
@@ -207,16 +221,16 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   SPtr<jlBox> newbox(new jlBox(*m_pDefaultBox));
   newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
   addObject(newbox);
-  //newbox.reset(new jlBox(*m_pDefaultBox));
-  //newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  //addObject(newbox);
+  newbox.reset(new jlBox(*m_pDefaultBox));
+  newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newbox);
 
   SPtr<jlCylinder> newcylinder(new jlCylinder(*m_pDefaultCylinder));
   newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
   addObject(newcylinder);
-  //newcylinder.reset(new jlCylinder(*m_pDefaultCylinder));
-  //newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  //addObject(newcylinder);
+  newcylinder.reset(new jlCylinder(*m_pDefaultCylinder));
+  newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newcylinder);
 
   SPtr<jlMMatte> matte(new jlMMatte(*m_pDefaultMMatte));
   matte->setKa(0.25f);
@@ -230,7 +244,7 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   matte->setKa(0.25f);
   matte->setKd(0.65f);
   matte->setCd({ 0.5f, 0.0f, 0.5f });
-  newPlane.reset(new jlPlane({ 0,-1000,0 }, { 0, 1, 0 }));
+  newPlane.reset(new jlPlane({ 0,-200,0 }, { 0, 1, 0 }));
   newPlane->m_pMaterial = matte;
   addObject(newPlane);
 
@@ -238,7 +252,8 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
 // Create and add Lights to scene
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-  m_pAmbientLight.reset(new jlLAmbient(1, {1, 1, 1}));
+  //m_pAmbientLight.reset(new jlLAmbient(1, {1, 1, 1}));
+  m_pAmbientLight = m_pDefaultLAmbientOccluder;
 
   SPtr<jlPointLight> pointLight(new jlPointLight);
   pointLight->setPosition({0, 50, 500});
@@ -368,7 +383,13 @@ void jlWorld::renderScene() {
   uint32 materialListNum = (uint32)m_MaterialsListString.size();
   for (uint32 i = 0; i < materialListNum; ++i)
     delete[] m_MaterialsListString[i];
-
+  uint32 shapesListNum = (uint32)m_geometriObjectsListString.size();
+  for (uint32 i = 0; i < materialListNum; ++i)
+    delete[] m_geometriObjectsListString[i];
+  uint32 ambientListNum = (uint32)m_ambientLightsListString.size();
+  for (uint32 i = 0; i < ambientListNum; ++i)
+    delete[] m_ambientLightsListString[i];
+  
   ImGui::SFML::Shutdown();
 }
 

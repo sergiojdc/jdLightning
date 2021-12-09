@@ -120,6 +120,15 @@
     <ClCompile Include="src\jlGOCylinder.cpp">
       <Filter>Archivos de origen\GeometriObjects</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlLAmbientOccluder.cpp">
+      <Filter>Archivos de origen\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="include\jlBoundingBox.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlBoundingBox.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Prerequisites.h">
@@ -205,6 +214,18 @@
     </ClInclude>
     <ClInclude Include="include\jlGOCylinder.h">
       <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlLAmbientOccluder.h">
+      <Filter>Archivos de encabezado\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlTAreaLight.h">
+      <Filter>Archivos de encabezado\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlMEmissive.h">
+      <Filter>Archivos de encabezado\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlBoundingBox.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

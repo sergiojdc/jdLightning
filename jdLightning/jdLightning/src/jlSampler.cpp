@@ -43,7 +43,7 @@ void
 jlSampler::mapSamplesToHemisphere(const float& e) {
   uint32 size = (uint32)m_samples.size();
   uint32 totalsets = m_numSamples * m_numSets;
-  m_hemisphereSamples.reserve(totalsets);
+  m_hemisphereSamples.reserve(size);
   for (uint32 j = 0; j < size; j++) {
     float cos_phi = cos(2.0f * Math::PI * m_samples[j].x);
     float sin_phi = sin(2.0f * Math::PI * m_samples[j].x);

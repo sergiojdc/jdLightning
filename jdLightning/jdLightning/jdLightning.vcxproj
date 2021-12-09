@@ -195,6 +195,8 @@
     <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_tables.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp" />
+    <ClCompile Include="include\jlBoundingBox.cpp" />
+    <ClCompile Include="src\jlBoundingBox.cpp" />
     <ClCompile Include="src\jlBRDFGlossySpecular.cpp" />
     <ClCompile Include="src\jlBRDFLambertian.cpp" />
     <ClCompile Include="src\jlCPinhole.cpp" />
@@ -202,6 +204,7 @@
     <ClCompile Include="src\jlGOCylinder.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
     <ClCompile Include="src\jlGOSphere.cpp" />
+    <ClCompile Include="src\jlLAmbientOccluder.cpp" />
     <ClCompile Include="src\jlMMatte.cpp" />
     <ClCompile Include="src\jlMPhong.cpp" />
     <ClCompile Include="src\jlMPlastic.cpp" />
@@ -213,6 +216,7 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\jlBoundingBox.h" />
     <ClInclude Include="include\jlBRDF.h" />
     <ClInclude Include="include\jlBRDFGlossySpecular.h" />
     <ClInclude Include="include\jlBRDFLambertian.h" />
@@ -224,8 +228,10 @@
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
     <ClInclude Include="include\jlLAmbient.h" />
+    <ClInclude Include="include\jlLAmbientOccluder.h" />
     <ClInclude Include="include\jlLight.h" />
     <ClInclude Include="include\jlMaterial.h" />
+    <ClInclude Include="include\jlMEmissive.h" />
     <ClInclude Include="include\jlMMatte.h" />
     <ClInclude Include="include\jlMPhong.h" />
     <ClInclude Include="include\jlMPlastic.h" />
@@ -234,6 +240,7 @@
     <ClInclude Include="include\jlShadeRec.h" />
     <ClInclude Include="include\jlSJittered.h" />
     <ClInclude Include="include\jlSRegular.h" />
+    <ClInclude Include="include\jlTAreaLight.h" />
     <ClInclude Include="include\jlTMultipleObjects.h" />
     <ClInclude Include="include\jlTracer.h" />
     <ClInclude Include="include\jlTRayCast.h" />

@@ -32,14 +32,14 @@ class jlPointLight : public jlLight {
 			* @return a vector3 with the direction
 			*/
 		virtual jlVector3
-		getDirection(jlShadeRec& sr) override;
+		getDirection(jlShadeRec& sr, uint32 sampleIndex = 0) override;
 
 		/**
 			* @brief returns the incident radiance at a hit point
 			* @return a color with the incident radiance
 			*/
 		virtual jlColor
-		L(jlShadeRec& sr) override;
+		L(jlShadeRec& sr, uint32 sampleIndex = 0) override;
 
 		/**
 		 * @brief returns if ray hit with another 

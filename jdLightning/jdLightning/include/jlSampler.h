@@ -86,6 +86,23 @@ class jlSampler
   };
 
   /**
+   * @brief get next sample on unit square
+   */
+  jlVector2
+  sampleUnitSquare(uint32 index) {
+    if (!omtimized) {
+      return sampleUnitSquare();
+    }
+    uint32 idx = index;
+    if (index >= m_samples.size()) {
+      idx = index - m_samples.size();
+    }
+    //suint32 idxS = uint32(m_jump + m_count++ % m_numSamples);
+    //suint32 idx = uint32(m_jump + m_shuffledIndices[idxS]);
+    return (m_samples[idx]);
+  };
+
+  /**
    * @brief get next sample on unit disk
    */
   jlVector2
@@ -102,9 +119,21 @@ class jlSampler
   jlVector3
   sampleHemisphere() {
     if (m_countHemisphere % m_numSamples == 0) // start of a new pixel
-      m_jump = (jlRandom::randomInt() % m_numSets) * m_numSamples;
-    uint32 indx = uint32(m_jump + m_countHemisphere++ % m_numSamples);
+      m_jumpHemisphere = (jlRandom::randomInt() % m_numSets) * m_numSamples;
+    uint32 indx = uint32(m_jumpHemisphere + m_countHemisphere++ % m_numSamples);
     return (m_hemisphereSamples[indx]);
+  }
+
+  jlVector3
+  sampleHemisphere(uint32 index) {
+    if (!omtimized) {
+      return sampleHemisphere();
+    }
+    uint32 idx = index;
+    if (index >= m_hemisphereSamples.size()) {
+      idx = index - m_samples.size();
+    }
+    return (m_hemisphereSamples[idx]);
   }
 
   /**
@@ -168,5 +197,8 @@ class jlSampler
 			* @brief random index jump
 			*/
 		int32 m_jump = 0;
+		int32 m_jumpHemisphere = 0;
 
+
+  bool omtimized = true;
 };

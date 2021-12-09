@@ -4,7 +4,8 @@
 #include "jlLight.h"
 
 jlColor 
-jlMMatte::normalShade(jlShadeRec& sr) {
+jlMMatte::normalShade(jlShadeRec& sr, uint32 sampleIndex) {
+  UNREFERENCED_PARAMETER(sampleIndex);
   jlVector3 wo = -sr.m_ray.m_direction;
   jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr);
   uint32 numLights = (uint32)sr.m_world->m_sceneLights.size();
@@ -22,9 +23,9 @@ jlMMatte::normalShade(jlShadeRec& sr) {
 }
 
 jlColor 
-jlMMatte::shadowShade(jlShadeRec& sr) {
+jlMMatte::shadowShade(jlShadeRec& sr, uint32 sampleIndex) {
   jlVector3 wo = -sr.m_ray.m_direction;
-  jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr);
+  jlColor L = m_ambientBRDF->rho(sr, wo) * sr.m_world->m_pAmbientLight->L(sr, sampleIndex);
   uint32 numLights = (uint32)sr.m_world->m_sceneLights.size();
   jlVector3 wi;
   float ndotwi;

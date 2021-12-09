@@ -18,6 +18,7 @@ namespace MATERIALTYPE {
 				MATTE = 0,
 				PHONG,
 				PLASTIC,
+				EMISSIVE,
 				NUMOFMATERIALS,
 				UKNOW
 		};
@@ -43,11 +44,11 @@ class jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  shade(jlShadeRec& sr) {
+  shade(jlShadeRec& sr, uint32 sampleIndex = 0) {
 #ifdef CASTSHADOWS
-    return shadowShade(sr);
+    return shadowShade(sr, sampleIndex);
 #else
-    return normalShade(sr);
+    return normalShade(sr, sampleIndex);
 #endif // CASTSHADOWS
   };
 
@@ -57,8 +58,9 @@ class jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  normalShade(jlShadeRec& sr) {
+  normalShade(jlShadeRec& sr, uint32 sampleIndex = 0) {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
     return { 0, 0, 0};
   };
 
@@ -68,8 +70,9 @@ class jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  shadowShade(jlShadeRec& sr) {
+  shadowShade(jlShadeRec& sr, uint32 sampleIndex = 0) {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
     return { 0, 0, 0};
   };
 
@@ -79,8 +82,9 @@ class jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  areaLightShade(jlShadeRec& sr) {
+  areaLightShade(jlShadeRec& sr, uint32 sampleIndex = 0) {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
     return { 0, 0, 0 };
   };
 
@@ -90,8 +94,9 @@ class jlMaterial {
 			* @reutrn the result color
 			*/
   virtual jlColor
-  pathShade(jlShadeRec& sr) {
+  pathShade(jlShadeRec& sr, uint32 sampleIndex = 0) {
 				UNREFERENCED_PARAMETER(sr);
+				UNREFERENCED_PARAMETER(sampleIndex);
     return { 0, 0, 0 };
   };
 

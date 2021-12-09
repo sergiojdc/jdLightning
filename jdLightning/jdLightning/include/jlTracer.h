@@ -52,9 +52,10 @@ class jlTracer {
    * @return a color
    */
   virtual jlColor
-  traceRay(const jlRay& ray, uint32 depth) const {
+  traceRay(const jlRay& ray, uint32 depth, uint32 sampleIndex = 0) const {
     UNREFERENCED_PARAMETER(ray);
     UNREFERENCED_PARAMETER(depth);
+    UNREFERENCED_PARAMETER(sampleIndex);
     return { 0, 0, 0 };
   };
 
