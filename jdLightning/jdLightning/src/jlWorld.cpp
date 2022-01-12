@@ -11,6 +11,7 @@
 #include "jlGOPlane.h"
 #include "jlGOBox.h"
 #include "jlGOCylinder.h"
+#include "jlGOTriangle.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -98,6 +99,10 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   strcpy(cname, name.c_str());
   m_geometriObjectsListString.push_back(cname);
   name = "Cylinder";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
+  name = "Triangle";
   cname = new char[name.size() + 1];
   strcpy(cname, name.c_str());
   m_geometriObjectsListString.push_back(cname);
@@ -199,54 +204,65 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   //Cylinder
   m_pDefaultCylinder.reset(new jlCylinder(50, 100, { 0,0,0 }));
   m_pDefaultCylinder->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //Triangle
+  m_pDefaultTriangle.reset(new jlTriangle({ 0,0,0 }, { 0,100,0 }, { 100,0,0 }));
+  m_pDefaultTriangle->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Create and add objects to scene wiht their materials
 //////////////////////////////////////////////////////////////////////////////////////////////
   m_sphere = jlSphere({0,0,0}, 40.0f);
 
-  
-  SPtr<jlSphere> newSphere(new jlSphere(*m_pDefaultSphere));
-  newSphere->m_position = { 90, -25, 0 };
-  newSphere->m_radius = 80.0f;
+  SPtr<jlTriangle> newtriangle(new jlTriangle({ 0,0,0 }, { 0,100,0 }, { 100,0,0 }));
   //newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
-  newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newSphere);
-
-  newSphere.reset(new jlSphere(*m_pDefaultSphere));
-  newSphere->m_position = { -90, -25, 0 };
-  newSphere->m_radius = 80.0f;
-  newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newSphere);
-
-  SPtr<jlBox> newbox(new jlBox(*m_pDefaultBox));
-  newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newbox);
-  newbox.reset(new jlBox(*m_pDefaultBox));
-  newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newbox);
-
-  SPtr<jlCylinder> newcylinder(new jlCylinder(*m_pDefaultCylinder));
-  newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newcylinder);
-  newcylinder.reset(new jlCylinder(*m_pDefaultCylinder));
-  newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newcylinder);
-
-  SPtr<jlMMatte> matte(new jlMMatte(*m_pDefaultMMatte));
-  matte->setKa(0.25f);
-  matte->setKd(0.65f);
-  matte->setCd({ 0.5f, 0.5f, 0 });
-  SPtr<jlPlane> newPlane(new jlPlane({ 0,0,-1000 }, { 0,0,1 }));
-  newPlane->m_pMaterial = matte;
-  addObject(newPlane);
-
-  matte.reset(new jlMMatte(*m_pDefaultMMatte));
-  matte->setKa(0.25f);
-  matte->setKd(0.65f);
-  matte->setCd({ 0.5f, 0.0f, 0.5f });
-  newPlane.reset(new jlPlane({ 0,-200,0 }, { 0, 1, 0 }));
-  newPlane->m_pMaterial = matte;
-  addObject(newPlane);
+  newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newtriangle);
+  newtriangle.reset(new jlTriangle({ 100,0,0 }, { 0,100,0 }, { 0,0,0 }));
+  //newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  addObject(newtriangle);
+  
+  //SPtr<jlSphere> newSphere(new jlSphere(*m_pDefaultSphere));
+  //newSphere->m_position = { 90, -25, 0 };
+  //newSphere->m_radius = 80.0f;
+  ////newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newSphere);
+  //
+  //newSphere.reset(new jlSphere(*m_pDefaultSphere));
+  //newSphere->m_position = { -90, -25, 0 };
+  //newSphere->m_radius = 80.0f;
+  //newSphere->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newSphere);
+  //
+  //SPtr<jlBox> newbox(new jlBox(*m_pDefaultBox));
+  //newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newbox);
+  //newbox.reset(new jlBox(*m_pDefaultBox));
+  //newbox->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newbox);
+  //
+  //SPtr<jlCylinder> newcylinder(new jlCylinder(*m_pDefaultCylinder));
+  //newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newcylinder);
+  //newcylinder.reset(new jlCylinder(*m_pDefaultCylinder));
+  //newcylinder->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newcylinder);
+  //
+  //SPtr<jlMMatte> matte(new jlMMatte(*m_pDefaultMMatte));
+  //matte->setKa(0.25f);
+  //matte->setKd(0.65f);
+  //matte->setCd({ 0.5f, 0.5f, 0 });
+  //SPtr<jlPlane> newPlane(new jlPlane({ 0,0,-1000 }, { 0,0,1 }));
+  //newPlane->m_pMaterial = matte;
+  //addObject(newPlane);
+  //
+  //matte.reset(new jlMMatte(*m_pDefaultMMatte));
+  //matte->setKa(0.25f);
+  //matte->setKd(0.65f);
+  //matte->setCd({ 0.5f, 0.0f, 0.5f });
+  //newPlane.reset(new jlPlane({ 0,-200,0 }, { 0, 1, 0 }));
+  //newPlane->m_pMaterial = matte;
+  //addObject(newPlane);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Create and add Lights to scene

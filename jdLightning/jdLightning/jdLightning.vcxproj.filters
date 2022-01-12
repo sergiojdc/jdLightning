@@ -129,6 +129,9 @@
     <ClCompile Include="src\jlBoundingBox.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlGOTriangle.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Prerequisites.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="include\jlBoundingBox.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGOTriangle.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

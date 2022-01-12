@@ -3,7 +3,7 @@
 	* @file    jlBoundingBox.h
 	* @author  Sergio Diaz (sergio_jdc@hotmail.com)
 	* @date    03/11/2021
-	* @brief   A class for a box heredated by jlGeometriObject
+	* @brief   A class for a boundig box
 	*
 	*
 	* @bug	    No known bugs.
@@ -14,7 +14,7 @@
 #include "jlVector3.h"
 #include "jlNormal.h"
 
-class jlBBox{
+class jlBBox {
  public:
   /**
    * @brief defaul constructor
@@ -22,9 +22,9 @@ class jlBBox{
   jlBBox() {};
 
   jlBBox(const jlVector3& min,
-        const jlVector3& max, 
-        const jlVector3& pos, 
-        const jlVector3& offset = { 0, 0, 0 }) {
+         const jlVector3& max, 
+         const jlVector3& pos, 
+         const jlVector3& offset = { 0, 0, 0 }) {
    m_min = min;
    m_max = max;
    m_position = pos;
@@ -83,9 +83,6 @@ friend class jlWorld;
    * @brief epislon const
    */
   static const double kEpsilon;
-
-  jlNormal
-  getNormalFace(uint32 faceHit);
 
   void
   calculateRealMinMax() {

@@ -21,6 +21,7 @@ namespace GEOMETRITYPE {
 				SPHERE,
 				BOX,
 				CYLINDER,
+				TRIANGLE,
 			 NUMOFTYPES,
 				UNKNOW
 		};

@@ -11,6 +11,7 @@
 #include "jlGOPlane.h"
 #include "jlGOBox.h"
 #include "jlGOCylinder.h"
+#include "jlGOTriangle.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -144,6 +145,9 @@ jlWorld::imguiShowObjectProperties() {
     if (objType == GEOMETRITYPE::CYLINDER) {
       m_sceneObjects[m_selectedObjectIdx].reset(new jlCylinder(*m_pDefaultCylinder));
     }
+    if (objType == GEOMETRITYPE::TRIANGLE) {
+      m_sceneObjects[m_selectedObjectIdx].reset(new jlTriangle(*m_pDefaultTriangle));
+    }
     m_selectedObject = m_sceneObjects[m_selectedObjectIdx];
     m_selectedObject->m_pMaterial = material;
     m_selectedObject->m_position = position;
@@ -161,6 +165,9 @@ jlWorld::imguiShowObjectProperties() {
     break;
    case GEOMETRITYPE::CYLINDER:
     imguiShowCylindreProperties();
+    break;
+   case GEOMETRITYPE::TRIANGLE:
+    imguiShowTriangleProperties();
     break;
    default:
     break;
@@ -250,6 +257,16 @@ jlWorld::imguiShowCylindreProperties() {
   ImGui::DragFloat3("Position", &cylinder->m_position.x);
   ImGui::DragFloat("Height", &cylinder->m_height, 0.5f, 0.0f);
   ImGui::DragFloat("Ratio", &cylinder->m_radius, 0.5f, 0.0f);
+}
+
+void
+jlWorld::imguiShowTriangleProperties() {
+  ImGui::Text("TRIANGLE");
+  auto triangle = std::static_pointer_cast<jlTriangle>(m_selectedObject);
+  ImGui::DragFloat3("vertex0", &triangle->m_v0.x);
+  ImGui::DragFloat3("vertex1", &triangle->m_v1.x);
+  ImGui::DragFloat3("vertex2", &triangle->m_v2.x);
+  triangle->updateNormal();
 }
 
 void
