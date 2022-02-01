@@ -12,6 +12,8 @@
 #include "jlGOBox.h"
 #include "jlGOCylinder.h"
 #include "jlGOTriangle.h"
+#include "jlGODisk.h"
+#include "jlCOClossedCylinder.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -106,7 +108,11 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   cname = new char[name.size() + 1];
   strcpy(cname, name.c_str());
   m_geometriObjectsListString.push_back(cname);
-
+  name = "Disk";
+  cname = new char[name.size() + 1];
+  strcpy(cname, name.c_str());
+  m_geometriObjectsListString.push_back(cname);
+  //Ambient Lights
   name = "Simple AmbientLight";
   cname = new char[name.size() + 1];
   strcpy(cname, name.c_str());
@@ -207,19 +213,32 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   //Triangle
   m_pDefaultTriangle.reset(new jlTriangle({ 0,0,0 }, { 0,100,0 }, { 100,0,0 }));
   m_pDefaultTriangle->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //Disk
+  m_pDefaultDisk.reset(new jlDisk(10, { 0,0,1 }, { 0,100,0 }));
+  m_pDefaultDisk->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Create and add objects to scene wiht their materials
 //////////////////////////////////////////////////////////////////////////////////////////////
   m_sphere = jlSphere({0,0,0}, 40.0f);
 
-  SPtr<jlTriangle> newtriangle(new jlTriangle({ 0,0,0 }, { 0,100,0 }, { 100,0,0 }));
-  //newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
-  newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newtriangle);
-  newtriangle.reset(new jlTriangle({ 100,0,0 }, { 0,100,0 }, { 0,0,0 }));
-  //newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
-  newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
-  addObject(newtriangle);
+  //SPtr<jlTriangle> newtriangle(new jlTriangle({ 0,0,0 }, { 0,100,0 }, { 100,0,0 }));
+  ////newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newtriangle);
+  //newtriangle.reset(new jlTriangle({ 100,0,0 }, { 0,100,0 }, { 0,0,0 }));
+  ////newSphere->m_pMaterial.reset(new jlMMatte(*m_pDefaultMMatte));
+  //newtriangle->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newtriangle);
+
+  //SPtr<jlDisk> newdisk(new jlDisk(10, { 0,0,1 }, { 0,100,0 }));
+  //newdisk->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
+  //addObject(newdisk);
+
+  SPtr<jlClossedCylinder> newCCylinder(new jlClossedCylinder(20, 50, { 0,0,0 }));
+  SPtr<jlMPhong> newPhong(new jlMPhong(*m_pDefaultMPhong));
+
+  newCCylinder->setMaterial(newPhong);
+  addObject(newCCylinder);
   
   //SPtr<jlSphere> newSphere(new jlSphere(*m_pDefaultSphere));
   //newSphere->m_position = { 90, -25, 0 };

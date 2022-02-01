@@ -123,13 +123,19 @@
     <ClCompile Include="src\jlLAmbientOccluder.cpp">
       <Filter>Archivos de origen\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="include\jlBoundingBox.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\jlBoundingBox.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\jlGOTriangle.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlCompoundObjects.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlGODisk.cpp">
+      <Filter>Archivos de origen\GeometriObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlCOClossedCylinder.cpp">
       <Filter>Archivos de origen\GeometriObjects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -231,6 +237,15 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="include\jlGOTriangle.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlCompoundObjects.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGODisk.h">
+      <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlCOClossedCylinder.h">
       <Filter>Archivos de encabezado\GeometryObjects</Filter>
     </ClInclude>
   </ItemGroup>

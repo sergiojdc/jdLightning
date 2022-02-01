@@ -195,11 +195,13 @@
     <ClCompile Include="..\dependencies\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_tables.cpp" />
     <ClCompile Include="..\dependencies\imgui\include\imgui_widgets.cpp" />
-    <ClCompile Include="include\jlBoundingBox.cpp" />
     <ClCompile Include="src\jlBoundingBox.cpp" />
     <ClCompile Include="src\jlBRDFGlossySpecular.cpp" />
     <ClCompile Include="src\jlBRDFLambertian.cpp" />
+    <ClCompile Include="src\jlCOClossedCylinder.cpp" />
+    <ClCompile Include="src\jlCompoundObjects.cpp" />
     <ClCompile Include="src\jlCPinhole.cpp" />
+    <ClCompile Include="src\jlGODisk.cpp" />
     <ClCompile Include="src\jlGOBox.cpp" />
     <ClCompile Include="src\jlGOCylinder.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
@@ -222,7 +224,10 @@
     <ClInclude Include="include\jlBRDFGlossySpecular.h" />
     <ClInclude Include="include\jlBRDFLambertian.h" />
     <ClInclude Include="include\jlCamera.h" />
+    <ClInclude Include="include\jlCOClossedCylinder.h" />
+    <ClInclude Include="include\jlCompoundObjects.h" />
     <ClInclude Include="include\jlCPinhole.h" />
+    <ClInclude Include="include\jlGODisk.h" />
     <ClInclude Include="include\jlGeometriObject.h" />
     <ClInclude Include="include\jlGOBox.h" />
     <ClInclude Include="include\jlGOCylinder.h" />

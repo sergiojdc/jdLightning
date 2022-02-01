@@ -12,6 +12,7 @@
 #include "jlGOBox.h"
 #include "jlGOCylinder.h"
 #include "jlGOTriangle.h"
+#include "jlGODisk.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -148,6 +149,9 @@ jlWorld::imguiShowObjectProperties() {
     if (objType == GEOMETRITYPE::TRIANGLE) {
       m_sceneObjects[m_selectedObjectIdx].reset(new jlTriangle(*m_pDefaultTriangle));
     }
+    if (objType == GEOMETRITYPE::DISK) {
+      m_sceneObjects[m_selectedObjectIdx].reset(new jlDisk(*m_pDefaultDisk));
+    }
     m_selectedObject = m_sceneObjects[m_selectedObjectIdx];
     m_selectedObject->m_pMaterial = material;
     m_selectedObject->m_position = position;
@@ -168,6 +172,9 @@ jlWorld::imguiShowObjectProperties() {
     break;
    case GEOMETRITYPE::TRIANGLE:
     imguiShowTriangleProperties();
+    break;
+   case GEOMETRITYPE::DISK:
+    imguiShowDiskProperties();
     break;
    default:
     break;
@@ -267,6 +274,16 @@ jlWorld::imguiShowTriangleProperties() {
   ImGui::DragFloat3("vertex1", &triangle->m_v1.x);
   ImGui::DragFloat3("vertex2", &triangle->m_v2.x);
   triangle->updateNormal();
+}
+
+void
+jlWorld::imguiShowDiskProperties() {
+  ImGui::Text("DISK");
+  auto disk = std::static_pointer_cast<jlDisk>(m_selectedObject);
+  ImGui::DragFloat3("Position", &disk->m_position.x);
+  ImGui::DragFloat3("Normal", &disk->m_normal.x);
+  ImGui::DragFloat("Ratio", &disk->m_ratio);
+  disk->m_squareRatio = disk->m_ratio * disk->m_ratio;
 }
 
 void

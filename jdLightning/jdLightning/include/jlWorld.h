@@ -34,6 +34,7 @@ class jlPlane;
 class jlBox;
 class jlCylinder;
 class jlTriangle;
+class jlDisk;
 class jlMaterial;
 class jlMMatte;
 class jlMPhong;
@@ -308,6 +309,7 @@ class jlWorld {
   SPtr<jlBox> m_pDefaultBox;
   SPtr<jlCylinder> m_pDefaultCylinder;
   SPtr<jlTriangle> m_pDefaultTriangle;
+  SPtr<jlDisk> m_pDefaultDisk;
 
   SPtr<jlMMatte> m_pDefaultMMatte;
   SPtr<jlMPhong> m_pDefaultMPhong;
@@ -372,10 +374,16 @@ class jlWorld {
   imguiShowCylindreProperties();
 
   /**
-   * @brief function to show Properties of a Cylinder
+   * @brief function to show Properties of a Triangle
    */
   void
   imguiShowTriangleProperties();
+  
+  /**
+   * @brief function to show Properties of a Disk
+   */
+  void
+  imguiShowDiskProperties();
 
   /**
    * @brief function to show Properties of materials

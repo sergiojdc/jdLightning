@@ -22,6 +22,8 @@ namespace GEOMETRITYPE {
 				BOX,
 				CYLINDER,
 				TRIANGLE,
+				DISK,
+				COMPOUND,
 			 NUMOFTYPES,
 				UNKNOW
 		};
