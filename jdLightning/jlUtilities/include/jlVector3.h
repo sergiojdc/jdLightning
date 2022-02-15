@@ -208,10 +208,26 @@ namespace jlUtilitiesSDK {
     /**
      * @brief compare a vector with an other vector.
      * @param vec is vector What to compare vector by.
+     * @return true if one component is less or equal
+     */
+    FORCEINLINE bool
+    operator<=(const jlVector3& Vec) const;
+
+    /**
+     * @brief compare a vector with an other vector.
+     * @param vec is vector What to compare vector by.
      * @return true if one component is major
      */
     FORCEINLINE bool
     operator>(const jlVector3& Vec) const;
+
+    /**
+     * @brief compare a vector with an other vector.
+     * @param vec is vector What to compare vector by.
+     * @return true if one component is major or equal
+     */
+    FORCEINLINE bool
+    operator>=(const jlVector3& Vec) const;
 
     /**
      * @brief get the component in a index
@@ -440,7 +456,15 @@ namespace jlUtilitiesSDK {
   FORCEINLINE bool
   jlVector3::operator<(const jlVector3& Vec) const {
     if (x < Vec.x || y < Vec.y || z < Vec.z) {
-    return true;
+      return true;
+    }
+    return false;
+  }
+
+  FORCEINLINE bool
+  jlVector3::operator<=(const jlVector3& Vec) const {
+    if (x <= Vec.x && y <= Vec.y && z <= Vec.z) {
+      return true;
     }
     return false;
   }
@@ -448,7 +472,15 @@ namespace jlUtilitiesSDK {
   FORCEINLINE bool
   jlVector3::operator>(const jlVector3& Vec) const {
     if (x > Vec.x || y > Vec.y || z > Vec.z) {
-    return true;
+      return true;
+    }
+    return false;
+  }
+
+  FORCEINLINE bool
+  jlVector3::operator>=(const jlVector3& Vec) const {
+    if (x >= Vec.x && y >= Vec.y && z >= Vec.z) {
+      return true;
     }
     return false;
   }

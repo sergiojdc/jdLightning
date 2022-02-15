@@ -24,11 +24,14 @@ jlDisk::hit(const jlRay& ray, double& tmin, jlShadeRec& sr) {
 
 bool 
 jlDisk::shadowHit(const jlRay& ray, float& tmin) {
+  jlVector3 vPosToRay = m_position - ray.m_origin;
+  jlVector3 vNormalEquality = ray.m_direction.dot(m_normal);
+  //float t = (m_position - ray.m_origin).dot(m_normal / (ray.m_direction.dot(m_normal)));
   float t = (m_position - ray.m_origin).dot(m_normal / (ray.m_direction.dot(m_normal)));
   if (t <= kEpsilon)
     return (false);
 
-  jlVector3 p = ray.m_origin + t * ray.m_direction;
+  jlVector3 p = ray.m_origin + (t * ray.m_direction);
   jlVector3 distanceVector = m_position - p;
   float distance = distanceVector.squareMagnitude();
   if (distance < m_squareRatio) {

@@ -64,5 +64,16 @@ jlBBox::hit(const jlRay& ray, double& t, jlShadeRec& s) {
     t1 = tz_max;
   }
 
-  return (t0 < t1&& t1 > kEpsilon);
+  if (t0 < t1 && t1 > kEpsilon) {
+    t = t0;
+    return true;
+  }
+  return false;
+}
+
+bool 
+jlBBox::inside(const jlVector3& point) {
+  if (point >= m_realMin && point <= m_realMax)
+    return true;
+  return false;
 }

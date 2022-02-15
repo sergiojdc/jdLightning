@@ -1,4 +1,6 @@
 #include "jlGOSphere.h"
+#include "jlBoundingBox.h"
+
 
 const double jlSphere::kEpsilon = 0.00001;
 
@@ -6,6 +8,13 @@ jlSphere::jlSphere(const jlVector3 pos, const float& ratio) {
   m_position = pos;
   m_radius = ratio;
   m_type = GEOMETRITYPE::SPHERE;
+  m_bbox.reset(new jlBBox);
+  m_bbox->setPosition(pos);
+  //ratio diference, this use for get min and max of bbox
+  jlVector3 dr = { ratio, ratio, ratio }; 
+  m_bbox->setMin(pos - dr);
+  m_bbox->setMax(pos + dr);
+
 }
 
 bool 
@@ -61,4 +70,14 @@ jlSphere::shadowHit(const jlRay& ray, float& tmin) {
     }
   }
   return false;
+}
+
+void 
+jlSphere::updateBoundigBox() {
+  m_bbox.reset(new jlBBox);
+  m_bbox->setPosition(m_position);
+  //ratio diference, this use for get min and max of bbox
+  jlVector3 dr = { m_radius, m_radius, m_radius };
+  m_bbox->setMin(m_position - dr);
+  m_bbox->setMax(m_position + dr);
 }

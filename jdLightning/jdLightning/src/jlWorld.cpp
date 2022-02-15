@@ -14,6 +14,7 @@
 #include "jlGOTriangle.h"
 #include "jlGODisk.h"
 #include "jlCOClossedCylinder.h"
+#include "jlGrid.h"
 //Samplers
 #include "jlSJittered.h"
 //Cameras
@@ -26,6 +27,8 @@
 #include "jlMMatte.h"
 #include "jlMPhong.h"
 #include "jlMPlastic.h"
+
+#include "jlBoundingBox.h"
 
 void 
 jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
@@ -133,10 +136,10 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   std::cout << "generating samples" << std::endl;
   sampler->generateSamples();
   std::cout << "samples were generated in " << time.getSeconds() << " seconds" << std::endl;
-  time.reset();
-  std::cout << "shuffling indices"  << std::endl;
-  sampler->setupShuffledIndices();
-  std::cout << "indices shuffled in " << time.getSeconds() << " seconds" << std::endl;
+  //time.reset();
+  //std::cout << "shuffling indices"  << std::endl;
+  //sampler->setupShuffledIndices();
+  //std::cout << "indices shuffled in " << time.getSeconds() << " seconds" << std::endl;
   time.reset();
   std::cout << "mapping unit disk"  << std::endl;
   sampler->mapSamplerToUnitDisk();
@@ -234,11 +237,49 @@ jlWorld::build(const uint32 width, const uint32 height, bool activeThreading) {
   //newdisk->m_pMaterial.reset(new jlMPhong(*m_pDefaultMPhong));
   //addObject(newdisk);
 
-  SPtr<jlClossedCylinder> newCCylinder(new jlClossedCylinder(20, 50, { 0,0,0 }));
-  SPtr<jlMPhong> newPhong(new jlMPhong(*m_pDefaultMPhong));
+  //SPtr<jlClossedCylinder> newCCylinder(new jlClossedCylinder(20, 50, { 0,0,0 }));
+  //SPtr<jlMPhong> newPhong(new jlMPhong(*m_pDefaultMPhong));
 
-  newCCylinder->setMaterial(newPhong);
-  addObject(newCCylinder);
+  //newCCylinder->setMaterial(newPhong);
+  //addObject(newCCylinder);
+
+  int num_spheres = 100;
+  float volume = 1000000 / num_spheres;
+  float radius = pow(0.75 * volume / 3.14159, 0.333333);
+  SPtr<jlGrid> grid_ptr (new jlGrid);
+  float maxf = 500;
+  jlVector3 max = { maxf, maxf, maxf };
+  jlVector3 min = { -maxf, -maxf, -maxf };
+  grid_ptr->m_bbox->setMax(max);
+  grid_ptr->m_bbox->setMin(min);
+  jlRandom::setSeed(15);
+  for (int j = 0; j < num_spheres; j++) {
+    SPtr<jlMMatte> matte_ptr(new jlMMatte);
+    matte_ptr->setKa(0.25);
+    matte_ptr->setKd(0.75);
+    jlColor color = { jlRandom::randomFloat(), 
+                      jlRandom::randomFloat(),
+                      jlRandom::randomFloat() };
+    matte_ptr->setCd(color);
+    SPtr<jlSphere> sphere_ptr(new jlSphere);
+    sphere_ptr->m_radius = radius;
+
+    float x =70*(1.0f - 2.0f * jlRandom::randomFloat());
+    float y =70*(1.0f - 2.0f * jlRandom::randomFloat());
+    float z =70*(1.0f - 2.0f * jlRandom::randomFloat());
+    sphere_ptr->m_position = { x,
+                               y,
+                               z };
+    sphere_ptr->updateBoundigBox();
+    sphere_ptr->m_pMaterial = matte_ptr;
+    grid_ptr->addObject(sphere_ptr);
+
+    //addObject(sphere_ptr);
+  }
+  grid_ptr->setupCells(); // must be called after all the
+   // spheres have been added
+  addObject(grid_ptr);
+
   
   //SPtr<jlSphere> newSphere(new jlSphere(*m_pDefaultSphere));
   //newSphere->m_position = { 90, -25, 0 };
@@ -386,8 +427,8 @@ void jlWorld::renderScene() {
 
     //modifyPointlight();
     imguiAmbientLight();
-    imguiShowObjects(); 
-    imguiShowObjectProperties();
+    //imguiShowObjects(); 
+    //imguiShowObjectProperties();
     imguiShowLights();
     imguiShowLightProperties();
     imguiShowCameraProperties();

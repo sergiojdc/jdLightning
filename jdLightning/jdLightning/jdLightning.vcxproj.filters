@@ -138,6 +138,12 @@
     <ClCompile Include="src\jlCOClossedCylinder.cpp">
       <Filter>Archivos de origen\GeometriObjects</Filter>
     </ClCompile>
+    <ClCompile Include="src\jlGrid.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jlGeometriObject.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Prerequisites.h">
@@ -247,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="include\jlCOClossedCylinder.h">
       <Filter>Archivos de encabezado\GeometryObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jlGrid.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

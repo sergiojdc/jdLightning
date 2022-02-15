@@ -47,5 +47,17 @@ namespace jlUtilitiesSDK {
      */
     static uint32
     randomInt();
+
+    /**
+     * @brief to set a seed to random functions
+     */
+    static void
+    setSeed(uint32 Seed);
+    
+    /**
+     * @brief to set NULL sed to random functions
+     */
+    static void
+    setNULLSeed();
   };
 }

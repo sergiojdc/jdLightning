@@ -201,12 +201,14 @@
     <ClCompile Include="src\jlCOClossedCylinder.cpp" />
     <ClCompile Include="src\jlCompoundObjects.cpp" />
     <ClCompile Include="src\jlCPinhole.cpp" />
+    <ClCompile Include="src\jlGeometriObject.cpp" />
     <ClCompile Include="src\jlGODisk.cpp" />
     <ClCompile Include="src\jlGOBox.cpp" />
     <ClCompile Include="src\jlGOCylinder.cpp" />
     <ClCompile Include="src\jlGOPlane.cpp" />
     <ClCompile Include="src\jlGOSphere.cpp" />
     <ClCompile Include="src\jlGOTriangle.cpp" />
+    <ClCompile Include="src\jlGrid.cpp" />
     <ClCompile Include="src\jlLAmbientOccluder.cpp" />
     <ClCompile Include="src\jlMMatte.cpp" />
     <ClCompile Include="src\jlMPhong.cpp" />
@@ -234,6 +236,7 @@
     <ClInclude Include="include\jlGOPlane.h" />
     <ClInclude Include="include\jlGOSphere.h" />
     <ClInclude Include="include\jlGOTriangle.h" />
+    <ClInclude Include="include\jlGrid.h" />
     <ClInclude Include="include\jlLAmbient.h" />
     <ClInclude Include="include\jlLAmbientOccluder.h" />
     <ClInclude Include="include\jlLight.h" />

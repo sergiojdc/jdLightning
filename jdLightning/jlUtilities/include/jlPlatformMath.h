@@ -38,7 +38,7 @@ namespace jlUtilitiesSDK {
     }
 
     template<typename T>
-    static T pow(T val, uint32 pot) {
+    static T pow(T val, float pot) {
       return static_cast<T>(std::pow(val, pot));
     }
 
@@ -125,7 +125,7 @@ namespace jlUtilitiesSDK {
      * @brief Utility to ensure angle is between +/- 180 degrees by unwinding.
      */
     static float
-      unwindDegrees(float A) {
+    unwindDegrees(float A) {
       while (180.f < A) {
         A -= 360.f;
       }
@@ -142,7 +142,7 @@ namespace jlUtilitiesSDK {
      *        it back into that range.
      */
     static float
-      unwindRadians(float A) {
+    unwindRadians(float A) {
       while (PI < A) {
         A -= TWO_PI;
       }
@@ -159,7 +159,7 @@ namespace jlUtilitiesSDK {
      * @param n is the number to calculate it´s factorial
      */
     static float
-      factorial(const int32& n);
+    factorial(const int32& n);
 
     /**
      * @brief Given summation of taylor serie of n function with x value
@@ -168,7 +168,7 @@ namespace jlUtilitiesSDK {
      * @return summation of taylor serie
      */
     static float
-      taylorSerie(const int32& n, const int32& x);
+    taylorSerie(const int32& n, const int32& x);
 
     /**
      * @brief Given number of euler serie
@@ -176,7 +176,7 @@ namespace jlUtilitiesSDK {
      * @return euler number
      */
     static float
-      eulerSerie(const int32& amount);
+    eulerSerie(const int32& amount);
 
     /**
      * @brief Function to get the Sin more fast used taylor series
@@ -184,7 +184,7 @@ namespace jlUtilitiesSDK {
      * @return Aproximation of Sin
      */
     static float
-      taylorSin(const float& x);
+    taylorSin(const float& x);
 
     /**
      * @brief Function to get the Cos more fast used taylor series
@@ -192,7 +192,7 @@ namespace jlUtilitiesSDK {
      * @return Aproximation of Cos
      */
     static float
-      taylorCos(const float& x);
+    taylorCos(const float& x);
 
     /**
      * @brief Function to get the Tan more fast used taylor series
@@ -200,7 +200,7 @@ namespace jlUtilitiesSDK {
      * @return Aproximation of Tan
      */
     static float
-      taylorTan(const float& x);
+    taylorTan(const float& x);
 
     /**
      * @brief Function to get the Tan more fast used taylor series
@@ -208,7 +208,7 @@ namespace jlUtilitiesSDK {
      * @return the inverse
      */
     static float
-      Q_rsqrt(float number) {
+    Q_rsqrt(float number) {
       long i;
       float x2, y;
       const float threehalfs = 1.5f;
@@ -221,6 +221,11 @@ namespace jlUtilitiesSDK {
       y = y * (threehalfs - (x2 * y * y));  //1st iteration
 
       return y;
+    }
+
+    static float
+    clamp(const float& x, const float& min, const float& max) {
+      return (x < min ? min : (x > max ? max : x));
     }
 
     static const float DEG2RAD;

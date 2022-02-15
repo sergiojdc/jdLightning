@@ -48,6 +48,12 @@ class jlSphere : public jlGeometricObject {
   virtual bool
   shadowHit(const jlRay& ray, float& tmin) override;
 
+		/**
+			* @brief function to update the object's bounding box 
+			*/
+		virtual void
+		updateBoundigBox() override;
+
   /**
    * @brief defaul destructor
    */

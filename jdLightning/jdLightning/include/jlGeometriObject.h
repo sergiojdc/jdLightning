@@ -14,6 +14,7 @@
 #include <jlRay.h>
 #include <jlColor.h>
 #include "jlShadeRec.h"
+class jlBBox;
 
 namespace GEOMETRITYPE {
 		enum E {
@@ -59,6 +60,21 @@ class jlGeometricObject {
 				return false; 
 		};
 
+		/**
+			* @brief function to update the object's bounding box 
+			*/
+		virtual void
+		updateBoundigBox();
+
+  /**
+   * @brief function to add object to Compound
+   * @param material is a weakSptr with the material to set
+   */
+		void 
+		addObject(WeakSptr<jlGeometricObject> object) {
+				UNREFERENCED_PARAMETER(object);
+		}
+
 
 		/**
 			* @brief color use for debug
@@ -79,4 +95,9 @@ class jlGeometricObject {
    * @brief point through which
    */
   jlVector3 m_position;
+		
+		/**
+			* @brief teh bounding box of object
+			*/
+		SPtr<jlBBox> m_bbox;
 };

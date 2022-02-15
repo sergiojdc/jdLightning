@@ -21,19 +21,25 @@ namespace jlUtilitiesSDK {
 
   float
   jlRandom::randomFloat() {
-    srand((unsigned int)time(NULL));
     return (float(rand()) / float((RAND_MAX)));
   }
 
   uint32
   jlRandom::randomInt0_255() {
-    srand((uint32)time(NULL));
     return uint32(rand() % 256);
   }
+  
   uint32 
   jlRandom::randomInt() {
-
-    srand((uint32)time(NULL));
     return uint32(rand());
+  }
+  
+  void 
+  jlRandom::setSeed(uint32 Seed){
+    srand(Seed);
+  }
+
+  void jlRandom::setNULLSeed() {
+    srand((uint32)time(NULL));
   }
 }
